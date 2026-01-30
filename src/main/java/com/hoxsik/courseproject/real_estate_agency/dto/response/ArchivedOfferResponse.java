@@ -1,0 +1,34 @@
+package com.hoxsik.courseproject.real_estate_agency.dto.response;
+
+import com.hoxsik.courseproject.real_estate_agency.jpa.entities.enums.estate.Availability;
+import com.hoxsik.courseproject.real_estate_agency.jpa.entities.enums.estate.Condition;
+import com.hoxsik.courseproject.real_estate_agency.jpa.entities.enums.estate.EstateType;
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
+public class ArchivedOfferResponse {
+    private Long id;
+    private Long estateID;
+    private Long agentID;
+    private String agent;
+    private Long ownerID;
+    private String owner;
+    private Long customerID;
+    private String customer;
+    private EstateType type;
+    private Integer bathrooms;
+    private Integer rooms;
+    private Boolean garage;
+    private Integer storey;
+    private String location;
+    private Boolean balcony;
+    private String description;
+    private Availability availability;
+    private Double size;
+    private Condition condition;
+    private Double price;
+    private LocalDateTime archiveDate;
+    private Boolean isReviewed;
+}

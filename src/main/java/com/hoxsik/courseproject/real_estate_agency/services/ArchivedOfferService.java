@@ -1,0 +1,73 @@
+package com.hoxsik.courseproject.real_estate_agency.services;
+
+import com.hoxsik.courseproject.real_estate_agency.jpa.entities.ArchivedOffer;
+import com.hoxsik.courseproject.real_estate_agency.jpa.entities.Offer;
+import com.hoxsik.courseproject.real_estate_agency.jpa.repositories.ArchivedOfferRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+public class ArchivedOfferService {
+    private final ArchivedOfferRepository archivedOfferRepository;
+
+    public Optional<ArchivedOffer> getByID(Long id) {
+        return archivedOfferRepository.findById(id);
+    }
+
+    /**
+     * Retrieves customer's unreviewed transactions
+     * @param username Username of the user who retrieves their unreviewed transactions
+     * @return List of archived offers if present, empty otherwise
+     */
+    public Optional<List<ArchivedOffer>> getCustomerUnreviewedArchivedOffers(String username) {
+        return archivedOfferRepository.findCustomersUnreviewedArchivedOffers(username);
+    }
+
+    /**
+     * Retrieves customer's  transactions
+     * @param username Username of the user who retrieves their transactions
+     * @return List of archived offers if present, empty otherwise
+     */
+    public Optional<List<ArchivedOffer>> getCustomerArchivedOffers(String username) {
+        return archivedOfferRepository.findCustomersArchivedOffers(username);
+    }
+
+    /**
+     * Retrieves owner's unreviewed transactions
+     * @param username Username of the user who retrieves their unreviewed transactions
+     * @return List of archived offers if present, empty otherwise
+     */
+    public Optional<List<ArchivedOffer>> getOwnerUnreviewedArchivedOffers(String username) {
+        return archivedOfferRepository.findOwnersUnreviewedArchivedOffers(username);
+    }
+
+    /**
+     * Retrieves owner's transactions
+     * @param username Username of the user who retrieves their transactions
+     * @return List of archived offers if present, empty otherwise
+     */
+    public Optional<List<ArchivedOffer>> getOwnerArchivedOffers(String username) {
+        return archivedOfferRepository.findOwnersArchivedOffers(username);
+    }
+
+    /**
+     * Allows to archive offers
+     * @param offer Offer to be archived
+     */
+    @Transactional
+    public void archiveOffer(Offer offer) {
+        ArchivedOffer archivedOffer = new ArchivedOffer();
+
+        archivedOffer.setCustomer(offer.getBlockedBy());
+        archivedOffer.setEstate(offer.getEstate());
+        archivedOffer.setPrice(offer.getPrice());
+        archivedOffer.setDescription(offer.getDescription());
+
+        archivedOfferRepository.save(archivedOffer);
+    }
+}

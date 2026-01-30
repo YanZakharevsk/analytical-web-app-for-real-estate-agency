@@ -1,0 +1,424 @@
+/* Сбрасываем отступы для full-width */
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.homepage {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 70px;
+    background: #ffffff;
+    position: relative;
+}
+
+/* Hero Section - ФИКСИРОВАННАЯ высота */
+.homepage .hero {
+    width: 100%;
+    text-align: center;
+    padding: 40px 20px; /* Фиксированный padding */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 280px; /* ФИКСИРОВАННАЯ высота */
+}
+
+.homepage .hero-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.homepage h1 {
+    font-size: 2.5rem; /* Уменьшенный размер */
+    font-weight: 700;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    line-height: 1.2;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.homepage .hero-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.95;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.5;
+    font-weight: 300;
+}
+
+/* Logo Section */
+.homepage .logo-section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    background: linear-gradient(rgba(248, 249, 250, 0.9), rgba(248, 249, 250, 0.9)),
+    url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    gap: 60px;
+}
+
+.homepage .logo-section img {
+    width: 300px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+    transition: all 0.3s ease;
+    border-radius: 15px;
+    background: white;
+    padding: 15px;
+}
+
+.homepage .logo-section img:hover {
+    transform: scale(1.05) rotate(2deg);
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2));
+}
+
+.homepage .logo-text {
+    max-width: 600px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* About Section */
+.homepage .about-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 30px;
+}
+
+.homepage .about-card {
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.1);
+    border-left: 6px solid #667eea;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.homepage .about-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.homepage .about-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 60px rgba(102, 126, 234, 0.2);
+}
+
+/* Features Section */
+.homepage .features-section {
+    width: 100%;
+    padding: 80px 40px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.homepage .features-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.homepage h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 50px;
+    color: #2d3748;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.homepage h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 4px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    border-radius: 3px;
+}
+
+.homepage h4 {
+    font-size: 1.6rem;
+    color: #2d3748;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.homepage h4::before {
+    font-size: 1.4rem;
+}
+
+/* Features Grid */
+.homepage .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.homepage .feature-card {
+    background: white;
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    border-top: 6px solid #667eea;
+}
+
+.homepage .feature-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    z-index: 0;
+}
+
+.homepage .feature-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 60px rgba(102, 126, 234, 0.2);
+}
+
+.homepage .feature-card h5 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.homepage .feature-card h5::before {
+    font-size: 1.6rem;
+}
+
+.homepage .feature-card:nth-child(1) h5::before {
+    content: '⭐';
+}
+
+.homepage .feature-card:nth-child(2) h5::before {
+    content: '❤️';
+}
+
+.homepage .feature-card:nth-child(3) h5::before {
+    content: '🤝';
+}
+
+.homepage .feature-card hr {
+    border: none;
+    height: 3px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    margin: 15px 0 25px;
+    width: 70px;
+    opacity: 0.5;
+    position: relative;
+    z-index: 1;
+}
+
+.homepage .feature-card p {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #4a5568;
+    position: relative;
+    z-index: 1;
+}
+
+/* Statistics Section - ФИКСИРОВАННАЯ высота */
+.homepage .stats-section {
+    width: 100%;
+    padding: 40px 20px; /* Фиксированный padding */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    height: 200px; /* ФИКСИРОВАННАЯ высота */
+    display: flex;
+    align-items: center;
+}
+
+.homepage .stats-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    text-align: center;
+}
+
+.homepage .stat-item {
+    padding: 15px;
+}
+
+.homepage .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.homepage .stat-label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .homepage .about-section {
+        grid-template-columns: 1fr;
+        max-width: 800px;
+    }
+
+    .homepage .features-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    }
+
+    .homepage .logo-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+
+    .homepage .logo-section img {
+        width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Hero - сохраняем фиксированную высоту на мобильных */
+    .homepage .hero {
+        height: 220px; /* Меньше, но фиксированное */
+        padding: 30px 15px;
+    }
+
+    .homepage h1 {
+        font-size: 1.8rem;
+    }
+
+    .homepage h2 {
+        font-size: 1.8rem;
+    }
+
+    .homepage h4 {
+        font-size: 1.3rem;
+    }
+
+    .homepage .hero-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .homepage .about-section,
+    .homepage .features-section {
+        padding: 0 20px;
+    }
+
+    .homepage .about-card,
+    .homepage .feature-card {
+        padding: 25px;
+    }
+
+    .homepage .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .homepage .logo-section {
+        padding: 40px 20px;
+        gap: 30px;
+    }
+
+    .homepage .logo-section img {
+        width: 200px;
+    }
+
+    .homepage .logo-text {
+        padding: 25px;
+    }
+
+    /* Stats - фиксированная высота на мобильных */
+    .homepage .stats-section {
+        height: 180px;
+        padding: 30px 15px;
+    }
+
+    .homepage .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .homepage .stat-number {
+        font-size: 1.6rem;
+    }
+
+    .homepage .stat-label {
+        font-size: 0.85rem;
+    }
+}
+
+/* Анимации */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.homepage .logo-section img {
+    animation: float 6s ease-in-out infinite;
+}
+
+.homepage > section {
+    animation: fadeIn 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.homepage .hero { animation-delay: 0.1s; }
+.homepage .logo-section { animation-delay: 0.2s; }
+.homepage .about-section { animation-delay: 0.3s; }
+.homepage .stats-section { animation-delay: 0.4s; }
+.homepage .features-section { animation-delay: 0.5s; }

@@ -1,0 +1,36 @@
+.favorites {
+    display: grid;
+    margin: 40px 40px;
+}
+
+.favorites .favorites {
+    display: grid;
+    gap: 50px;
+}
+.offer-preview {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
+}
+
+.offer-preview h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.view-details-btn {
+    padding: 10px 20px;
+    background-color: rgb(68, 68, 68);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.view-details-btn:hover {
+    background-color: #333333;
+}

@@ -1,0 +1,183 @@
+.my-estates {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.my-estates h2 {
+    text-transform: uppercase;
+    font-size: 28px;
+    margin-top: 40px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.my-estates .card {
+    display: grid;
+    grid-template-columns: auto auto;
+    min-height: 600px;
+    height: auto; /* Меняем фиксированную высоту на auto */
+    transition: height 0.3s ease;
+    position: relative;
+    overflow: visible; /* Убираем overflow чтобы контент не обрезался */
+}
+
+.my-estates .card img {
+    scale: 0.9;
+    margin: 10p;
+}
+
+.my-estates .card.expanded {
+    height: auto; /* Высота определяется содержимым */
+}
+
+.my-estates .info {
+    scale: 1.15;
+    margin-top: 50px;
+    align-content: start;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: grid;
+    justify-items: start;
+    grid-template-columns: repeat(3, auto);
+    grid-template-rows: auto; /* Делаем строки автоматическими */
+}
+
+.carousel {
+    width: 500px;
+    height: 400px;    
+}
+
+.carousel-root {
+    width: 500px;
+    height: 500px;    
+}
+
+.thumbs-wrapper axis-vertical {
+    width: 300px;
+    height: 100px;
+}
+
+.my-estates .reported {
+    margin-top: 40px;
+    display: grid;
+    gap: 30px; /* Отступы между карточками */
+}
+
+.my-estates .info {
+    scale: 1.15;
+    margin-top: 50px;
+    align-content: start;
+    padding-left: 30px;
+    padding-right: 30px;
+    display: grid;
+    justify-items: start;
+    grid-template-columns: repeat(3, auto);
+}
+
+.my-estates .info div h2 {
+    display: inline;
+    font-weight: 550;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    grid-column: 1 / -1;
+    text-align: left;
+}
+
+.my-estates .description {
+    margin-top: 30px;
+    font-size: 17px;
+    grid-column: 1 / -1;
+    line-height: 1.5;
+    overflow: visible; /* Убираем обрезку текста */
+    white-space: normal; /* Разрешаем перенос текста */
+    word-wrap: break-word; /* Перенос длинных слов */
+}
+
+.my-estates .price {
+    grid-column: 1 / -1;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+.my-estates p span {
+    font-weight: 600;
+}
+
+.my-estates p {
+    display: inline;
+}
+
+.my-estates .info img {
+    margin-right: 10px;
+}
+
+.my-estates .info div {
+    grid-column: 1 / -1;
+    margin-bottom: 20px;
+}
+
+.my-estates .info div p {
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-right: 10px;
+    font-weight: 550;
+    color: rgb(111, 111, 111);
+}
+
+.my-estates .info .header {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+}
+.my-estates .card {
+    position: relative;
+}
+
+.delete-estate-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    color: #444;
+    z-index: 10;
+}
+
+.delete-estate-btn:hover {
+    color: red;
+}
+
+.my-estates .show-more-btn {
+    background: none;
+    border: none;
+    color: #0066cc;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 8px;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.my-estates .show-more-btn:hover {
+    color: #004499;
+}
+
+.my-estates .description {
+    margin-top: 30px;
+    font-size: 17px;
+    grid-column: 1 / -1;
+    line-height: 1.5;
+}
+
+.description-text {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+

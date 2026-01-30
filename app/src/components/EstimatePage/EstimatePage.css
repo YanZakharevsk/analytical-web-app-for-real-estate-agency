@@ -1,0 +1,200 @@
+.estimate-page {
+    padding: 60px 80px;
+}
+
+.estimate-hero {
+    display: flex;
+    gap: 60px;
+    align-items: center;
+}
+
+.estimate-left {
+    flex: 1;
+}
+
+.estimate-right img {
+    max-width: 100%;
+}
+
+.subtitle {
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.steps {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.steps span {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.steps .active {
+    background: #764ba2;
+    color: #fff;
+}
+
+.step-block input,
+.step-block select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.condition-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.condition-buttons button {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+}
+
+.condition-buttons .active {
+    background: #764ba2;
+    color: #fff;
+}
+
+.step-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.next {
+    background: #764ba2;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    border: none;
+}
+
+.next:disabled {
+    opacity: 0.4;
+}
+
+.back {
+    background: transparent;
+    border: none;
+    color: #764ba2;
+}
+.estimate-right {
+    flex: 1.2; /* даём больше места */
+    display: flex;
+    justify-content: center;
+}
+
+.estimate-right img {
+    width: 120%;
+    max-width: 700px;
+    height: auto;
+}
+
+
+/* ====== БЛОК КАРТОЧЕК ====== */
+.estimate-benefits {
+    margin-top: 80px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.benefit-card {
+    background: #f6f6f6;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.estimate-faq h2 {
+    margin-bottom: 30px;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-item h4 {
+    margin-bottom: 8px;
+}
+/* ===== КАК ЭТО РАБОТАЕТ ===== */
+.estimate-how {
+    margin-top: 100px;
+}
+
+.estimate-how h2 {
+    margin-bottom: 40px;
+}
+
+.how-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.how-card {
+    background: #f7f4fb;
+    padding: 30px;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.how-icon {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+/* ===== FAQ ===== */
+.estimate-faq {
+    margin-top: 100px;
+}
+
+.estimate-faq details {
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    border-radius: 12px;
+    background: #f6f6f6;
+}
+
+.estimate-faq summary {
+    cursor: pointer;
+    font-weight: 600;
+}
+.estimate-result {
+    margin-top: 30px;
+    padding: 25px;
+    background: #f7f4fb;
+    border-radius: 16px;
+}
+
+.estimate-price {
+    font-size: 32px;
+    font-weight: 700;
+    color: #764ba2;
+    margin: 10px 0;
+}
+
+.estimate-percent {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.estimate-hint {
+    font-size: 15px;
+    color: #555;
+}
+

@@ -1,0 +1,89 @@
+/* Navbar.css */
+
+.navbar {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    padding: 0 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+.navbar li {
+    padding: 10px 5px;
+}
+
+.navbar a:link,
+.navbar a:visited,
+.navbar a:focus,
+.navbar a:active {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.navbar a:hover {
+    color: #fff;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.disabled-link {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Добавляем только для логотипа */
+.navbar > div {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+}
+
+
+.navbar img {
+    width: 120px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.navbar img:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+}
+
+/* Адаптив */
+@media (max-width: 1024px) {
+    .navbar {
+        flex-direction: column;
+        padding: 10px 20px;
+        gap: 10px;
+    }
+
+    .navbar ul {
+        gap: 15px;
+    }
+
+    .navbar img {
+        width: 100px;
+    }
+}

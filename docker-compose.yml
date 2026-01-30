@@ -1,0 +1,18 @@
+version: '3.8'
+
+volumes:
+  pg_agency:
+
+services:
+  agency_db:
+    image: postgres:15
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=agency
+    volumes:
+      - pg_agency:/var/lib/postgresql/data
+
+    ports:
+      - "127.0.0.1:5433:5432"
