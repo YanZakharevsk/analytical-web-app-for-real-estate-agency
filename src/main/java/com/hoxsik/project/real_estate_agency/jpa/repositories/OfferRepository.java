@@ -51,7 +51,7 @@ public interface OfferRepository extends JpaRepository<Offer, Long> {
     List<Offer> findAllForSale();
 
     @Query("""
-        select new com.hoxsik.courseproject.real_estate_agency.dto.response.AgentPercentDto(
+        select new com.hoxsik.project.real_estate_agency.dto.response.AgentPercentDto(
             e.agent.user.firstName,
             count(o) * 100.0 / (select count(o2) from Offer o2)
         )

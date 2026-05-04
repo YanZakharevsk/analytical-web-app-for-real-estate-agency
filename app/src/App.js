@@ -26,12 +26,14 @@ import Manage from './components/Manage/Manage';
 import Analytics from "./components/Analytics/Analytics";
 import EstimatePage from "./components/EstimatePage/EstimatePage";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
+import RouteAnalyticsListener from "./components/RouteAnalyticsListener";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <AuthProvider>
+          <RouteAnalyticsListener />
           <Navbar/>
           <Routes>
             <Route path='register' element={<Register/>}></Route>

@@ -16,17 +16,17 @@ import org.springframework.stereotype.Component;
 public class LoggingAdvice {
     private static final Logger log = LogManager.getLogger(LoggingAdvice.class);
 
-    @Before("execution(* com.hoxsik.courseproject.real_estate_agency.controllers.*(..))")
+    @Before("execution(* com.hoxsik.project.real_estate_agency.controllers.*(..))")
     public void logEndpointRequest(JoinPoint joinPoint) {
         log.info("Endpoint reached: " + joinPoint.getSignature().toShortString());
     }
 
-    @AfterReturning(pointcut = "execution(* com.hoxsik.courseproject.real_estate_agency.controllers.*(..))", returning = "response")
+    @AfterReturning(pointcut = "execution(* com.hoxsik.project.real_estate_agency.controllers.*(..))", returning = "response")
     public void logEndpointResponse(JoinPoint joinPoint, Object response) {
         log.info("Endpoint response: " + response.toString());
     }
 
-    @AfterThrowing(pointcut = "within(com.hoxsik.courseproject.real_estate_agency.*)", throwing = "exception")
+    @AfterThrowing(pointcut = "within(com.hoxsik.project.real_estate_agency.*)", throwing = "exception")
     public void logException(JoinPoint joinPoint, Throwable exception) {
         log.error("Exception in " + joinPoint.getSignature().toShortString() + ": " + exception.getMessage());
     }

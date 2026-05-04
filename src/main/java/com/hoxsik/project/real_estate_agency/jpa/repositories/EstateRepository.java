@@ -70,7 +70,7 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     @Query("""
     select e
     from Estate e
-    where e.availability = com.hoxsik.courseproject.real_estate_agency.jpa.entities.enums.estate.Availability.FOR_RENT
+    where e.availability = com.hoxsik.project.real_estate_agency.jpa.entities.enums.estate.Availability.FOR_RENT
 """)
     List<Estate> findAllForRent();
 

@@ -63,7 +63,7 @@ public interface ArchivedOfferRepository extends JpaRepository<ArchivedOffer, Lo
     List<ArchivedOffer> findAllForSale();
 
     @Query("""
-        select new com.hoxsik.courseproject.real_estate_agency.dto.response.AgentPercentDto(
+        select new com.hoxsik.project.real_estate_agency.dto.response.AgentPercentDto(
             e.agent.user.firstName,
             count(a) * 100.0 / (select count(a2) from ArchivedOffer a2)
         )

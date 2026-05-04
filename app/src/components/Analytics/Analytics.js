@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../AuthContext.js';
 import { Link } from 'react-router-dom';
+import { trackBatch } from '../../utils/analyticsTrack';
 import './Analytics.css';
 import {
     LineChart,
@@ -41,6 +42,33 @@ function Analytics() {
     const [agentOffersData, setAgentOffersData] = useState([]);
     const [agentArchivedData, setAgentArchivedData] = useState([]);
 
+    const prevSegment = useRef(segment);
+    const prevPriceIndex = useRef(priceIndex);
+
+    useEffect(() => {
+        if (prevSegment.current === segment) {
+            return;
+        }
+        trackBatch([{
+            eventName: 'analytics_segment_select',
+            category: 'INTERACTION',
+            properties: { segment_type: segment, previous_segment: prevSegment.current }
+        }], authenticatedUser?.token);
+        prevSegment.current = segment;
+    }, [segment, authenticatedUser?.token]);
+
+    useEffect(() => {
+        if (prevPriceIndex.current === priceIndex) {
+            return;
+        }
+        trackBatch([{
+            eventName: 'analytics_index_select',
+            category: 'INTERACTION',
+            properties: { index_type: priceIndex, previous_index: prevPriceIndex.current }
+        }], authenticatedUser?.token);
+        prevPriceIndex.current = priceIndex;
+    }, [priceIndex, authenticatedUser?.token]);
+
 
     // ===== FETCH 1 =====
     useEffect(() => {
@@ -59,7 +87,20 @@ function Analytics() {
             })
         })
             .then(res => res.json())
-            .then(data => setPriceDynamicsData(data))
+            .then(data => {
+                setPriceDynamicsData(data);
+                if (Array.isArray(data) && data.length > 0) {
+                    trackBatch([{
+                        eventName: 'analytics_report_generated',
+                        category: 'CONVERSION',
+                        properties: {
+                            segment_type: segment,
+                            index_type: priceIndex,
+                            records_count: data.length
+                        }
+                    }], authenticatedUser?.token);
+                }
+            })
             .catch(() => console.log('Failed to fetch price dynamics'));
 
     }, [segment, rooms, priceIndex, authenticatedUser]);

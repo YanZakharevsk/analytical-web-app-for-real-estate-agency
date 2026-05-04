@@ -1,7 +1,6 @@
 package com.hoxsik.project.real_estate_agency.services;
 
 import com.hoxsik.project.real_estate_agency.dto.request.PriceDynamicsRequest;
-import com.hoxsik.courseproject.real_estate_agency.dto.response.*;
 
 import com.hoxsik.project.real_estate_agency.dto.response.*;
 import com.hoxsik.project.real_estate_agency.jpa.entities.ArchivedOffer;
@@ -32,7 +31,7 @@ public class AnalyticsService {
 
     private final OfferRepository offerRepository;
     private final ArchivedOfferRepository archivedOfferRepository;
-    private final AgentRepository agentRepository;
+    //private final AgentRepository agentRepository;
 
     private final EstateRepository estateRepository;
 
