@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext.js';
 import star from './star.png';
 import starFilled from './star-filled.png';
+import { trackEvent } from '../../utils/analyticsTrack';
 
 function Review() {
     const { authenticatedUser } = useAuth();
@@ -46,6 +47,15 @@ function Review() {
 
     const onSubmitClick = (e) => {
         e.preventDefault();
+        trackEvent({
+            eventName: "review_submit",
+            category: "INTERACTION",
+            properties: {
+                agent_id: Number(agent),
+                rating: rating,
+                comment_length: comment.length
+            }
+        }, authenticatedUser?.token);
 
         const postReview = async () => {
             const body = {
@@ -67,12 +77,29 @@ function Review() {
 
                 setIsSuccess(false);
                 setIsFailed(true);
+                trackEvent({
+                    eventName: "listing_validation_error",
+                    category: "SYSTEM",
+                    properties: {
+                        field_name: "review",
+                        error_type: "submit_failed"
+                    }
+                }, authenticatedUser?.token);
 
                 return;
             };
 
             setIsSuccess(true);
             setIsFailed(false);
+            trackEvent({
+                eventName: "review_published",
+                category: "CONVERSION",
+                properties: {
+                    agent_id: Number(agent),
+                    rating: rating,
+                    comment_length: comment.length
+                }
+            }, authenticatedUser?.token);
         }
 
         postReview();

@@ -3,6 +3,7 @@ import './MeetingSlotsAdder.css';
 import { useState } from 'react';
 import remove from './remove.png';
 import calendar from './calendar.png';
+import { trackEvent } from '../../utils/analyticsTrack';
 
 function MeetingSlotsAdder() {
     const { authenticatedUser } = useAuth();
@@ -41,6 +42,14 @@ function MeetingSlotsAdder() {
 
             setIsFailed(false);
             setIsSuccess(true);
+            trackEvent({
+                eventName: "meeting_scheduled",
+                category: "CONVERSION",
+                properties: {
+                    meet: "slot_batch_created",
+                    slots_count: slots.length
+                }
+            }, authenticatedUser?.token);
         };
 
         add();
@@ -57,7 +66,16 @@ function MeetingSlotsAdder() {
                 <img src={calendar} width='100' height='100'/>
                 <div className='adder'>
                     <input type='datetime-local' value={date} onChange={(e) => setDate(e.target.value)}></input>
-                    <button className='btn btn-dark' onClick={() => setSlots((prevSlots) => [...prevSlots, date])}>Добавить</button>
+                    <button className='btn btn-dark' onClick={() => {
+                        setSlots((prevSlots) => [...prevSlots, date]);
+                        trackEvent({
+                            eventName: "meeting_slot_add",
+                            category: "INTERACTION",
+                            properties: {
+                                date_time: date
+                            }
+                        }, authenticatedUser?.token);
+                    }}>Добавить</button>
                 </div>
             </div>
 

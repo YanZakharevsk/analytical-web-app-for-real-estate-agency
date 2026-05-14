@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Register.css';
+import { trackEvent } from '../../utils/analyticsTrack';
 
 function Register() {
     const [firstName, setFirstName] = useState("");
@@ -77,9 +78,26 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        trackEvent({
+            eventName: "registration_submit",
+            category: "INTERACTION",
+            properties: {
+                user_email: email,
+                user_password: "[redacted]",
+                user_role: role || "unknown"
+            }
+        });
 
         if (password !== repeatPassword) {
             setPasswordMatch(false);
+            trackEvent({
+                eventName: "registration_failed",
+                category: "SYSTEM",
+                properties: {
+                    error_type: "invalid_data",
+                    user_email: email
+                }
+            });
             return;
         }
 
@@ -106,10 +124,27 @@ function Register() {
             if (!response.ok) {
                 console.log("Failed to register");
                 setRegistrationFailure(true);
+                trackEvent({
+                    eventName: "registration_failed",
+                    category: "SYSTEM",
+                    properties: {
+                        error_type: "email_exists_or_invalid_data",
+                        user_email: email
+                    }
+                });
                 return;
             }
 
             setRegistrationSuccess(true);
+            trackEvent({
+                eventName: "registration_completed",
+                category: "CONVERSION",
+                properties: {
+                    user_role: role || "unknown",
+                    user_password: "[redacted]",
+                    auth_type: "email"
+                }
+            });
         }
 
 

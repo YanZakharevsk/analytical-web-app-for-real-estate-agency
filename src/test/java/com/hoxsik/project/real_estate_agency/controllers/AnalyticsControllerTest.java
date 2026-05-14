@@ -38,16 +38,13 @@ class AnalyticsControllerTest {
         userRepository.deleteAll();
     }
 
-    // TC-9: Получение аналитики цен
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void testGetPriceDynamics_Success() throws Exception {
-        // Arrange
         PriceDynamicsRequest request = new PriceDynamicsRequest();
         request.setSegment("ALL");
         request.setPriceIndex("TOTAL");
 
-        // Act & Assert
         mockMvc.perform(post("/api/analytics/price-dynamics")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -59,7 +56,6 @@ class AnalyticsControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     void testGetAgentStats_Success() throws Exception {
-        // Act & Assert
         mockMvc.perform(get("/api/analytics/agents"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.offers").isArray())

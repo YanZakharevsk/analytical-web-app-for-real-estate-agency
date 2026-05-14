@@ -2,6 +2,7 @@ import { useAuth } from "../AuthContext";
 import "./ReportEstate.css";
 import { useEffect, useState } from 'react';
 import bullet from './checked.png';
+import { trackEvent } from '../../utils/analyticsTrack';
 
 function ReportEstate() {
     const { authenticatedUser } = useAuth();
@@ -63,6 +64,22 @@ function ReportEstate() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        trackEvent({
+            eventName: "add_listing_submit",
+            category: "INTERACTION",
+            properties: {
+                property_type: type,
+                characteristics: {
+                    bathrooms,
+                    rooms,
+                    storey,
+                    condition,
+                    availability
+                },
+                area: size,
+                rooms_count: rooms
+            }
+        }, authenticatedUser?.token);
 
         console.log(authenticatedUser.token)
 
@@ -94,10 +111,27 @@ function ReportEstate() {
 
             if (!response.ok) {
                 console.log("Failed to post the offer");
+                trackEvent({
+                    eventName: "listing_validation_error",
+                    category: "SYSTEM",
+                    properties: {
+                        field_name: "offer",
+                        error_type: "submit_failed"
+                    }
+                }, authenticatedUser?.token);
                 return;
             }
 
             const data = await response.json();
+            trackEvent({
+                eventName: "listing_request_submitted",
+                category: "CONVERSION",
+                properties: {
+                    listing_id: data,
+                    property_type: type,
+                    price: offeredPrice
+                }
+            }, authenticatedUser?.token);
 
             console.log(data);
 
@@ -119,6 +153,15 @@ function ReportEstate() {
 
                     if (!response.ok) {
                         console.log("Failed to post photos");
+                        trackEvent({
+                            eventName: "image_upload_failed",
+                            category: "SYSTEM",
+                            properties: {
+                                file_size: photo.size,
+                                error_reason: "upload_failed",
+                                listing_id: data
+                            }
+                        }, authenticatedUser?.token);
                         return;
                     }
                 }

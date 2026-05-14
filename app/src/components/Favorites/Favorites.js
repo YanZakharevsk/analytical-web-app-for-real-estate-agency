@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom'; // Добавляем навигацию
 import './Favorites.css';
+import { trackEvent, getCurrentScreenOrigin } from '../../utils/analyticsTrack';
 
 function Favorites() {
     const { authenticatedUser } = useAuth();
@@ -24,6 +25,13 @@ function Favorites() {
 
             const data = await response.json();
             setFavorites(data);
+            trackEvent({
+                eventName: "favorites_sync_completed",
+                category: "SYSTEM",
+                properties: {
+                    favorites_count: Array.isArray(data) ? data.length : 0
+                }
+            }, authenticatedUser?.token);
         }
 
         fetchFavorites();
@@ -31,6 +39,14 @@ function Favorites() {
 
     // Функция для перехода к деталям предложения
     const handleViewDetails = (offerId) => {
+        trackEvent({
+            eventName: "property_card_click",
+            category: "INTERACTION",
+            properties: {
+                property_id: offerId,
+                screen_origin: getCurrentScreenOrigin()
+            }
+        }, authenticatedUser?.token);
         navigate(`/check-details/${offerId}`);
     }
 

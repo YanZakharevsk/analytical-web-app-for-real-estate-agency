@@ -7,6 +7,7 @@ import details from './file.png';
 import filter from './filter.png';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext.js'; 
+import { trackEvent, getCurrentScreenOrigin } from '../../utils/analyticsTrack';
 
 function Estates() {
     const [offers, setOffers] = useState([]);
@@ -75,6 +76,25 @@ function Estates() {
     
                 if (response.ok) {
                     const data = await response.json();
+                    const resultsCount = Array.isArray(data) ? data.length : 0;
+                    trackEvent({
+                        eventName: "search_performed",
+                        category: "SYSTEM",
+                        properties: {
+                            search_query: JSON.stringify(criteria),
+                            results_count: resultsCount
+                        }
+                    }, authenticatedUser?.token);
+                    if (resultsCount === 0) {
+                        trackEvent({
+                            eventName: "search_no_results",
+                            category: "SYSTEM",
+                            properties: {
+                                search_query: JSON.stringify(criteria),
+                                filters_applied: Object.values(criteria).filter((v) => v !== "" && v !== null).length
+                            }
+                        }, authenticatedUser?.token);
+                    }
 
                     const fetchOffersWithPhotos = async (offer) => {
                         const photos = await PhotosFetcher(offer.estateID);
@@ -102,6 +122,14 @@ function Estates() {
 
     const handleFilterChange = (e) => {
         const { name, value, type, checked } = e.target;
+        trackEvent({
+            eventName: "search_filter_apply",
+            category: "INTERACTION",
+            properties: {
+                filter_type: name || "unknown",
+                filter_value: type === "checkbox" ? checked : value
+            }
+        }, authenticatedUser?.token);
 
         if (type === 'checkbox') {
             setCriteria(prevCriteria => ({
@@ -120,6 +148,14 @@ function Estates() {
 
         if (authenticatedUser.token === "") {
             alert("You must log in first.");
+            trackEvent({
+                eventName: "access_denied",
+                category: "SYSTEM",
+                properties: {
+                    required_role: "CUSTOMER",
+                    current_role: "ANONYMOUS"
+                }
+            });
             return;
         }
 
@@ -135,6 +171,22 @@ function Estates() {
                 console.log("Failed to add the offer to favorites");
                 return;
             }
+            trackEvent({
+                eventName: "add_to_favorites_click",
+                category: "INTERACTION",
+                properties: {
+                    property_id: id,
+                    screen_origin: getCurrentScreenOrigin()
+                }
+            }, authenticatedUser?.token);
+            trackEvent({
+                eventName: "property_added_to_favorites",
+                category: "CONVERSION",
+                properties: {
+                    property_id: id,
+                    screen_origin: getCurrentScreenOrigin()
+                }
+            }, authenticatedUser?.token);
 
             const image = document.querySelector(`.heart${id}`);
 
@@ -157,6 +209,14 @@ function Estates() {
     const onCheckDetailsClick = () => {
         if (authenticatedUser.token === "") {
             alert("You must log in first.");
+            trackEvent({
+                eventName: "access_denied",
+                category: "SYSTEM",
+                properties: {
+                    required_role: "CUSTOMER",
+                    current_role: "ANONYMOUS"
+                }
+            });
             return;
         }
     }
@@ -248,7 +308,17 @@ function Estates() {
 
                                 <div className='buttons'>
                                     <button className='btn'><Link to={`/check-details/${offer.info.id}`}
-                                                                  onClick={onCheckDetailsClick}><img src={details}
+                                                                  onClick={() => {
+                                                                      onCheckDetailsClick();
+                                                                      trackEvent({
+                                                                          eventName: "property_card_click",
+                                                                          category: "INTERACTION",
+                                                                          properties: {
+                                                                              property_id: offer.info.id,
+                                                                              screen_origin: getCurrentScreenOrigin()
+                                                                          }
+                                                                      }, authenticatedUser?.token);
+                                                                  }}><img src={details}
                                                                                                      width='25'
                                                                                                      height='25'/></Link>Просмотреть
                                         детали

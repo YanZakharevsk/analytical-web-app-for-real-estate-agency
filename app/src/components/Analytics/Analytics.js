@@ -89,6 +89,15 @@ function Analytics() {
             .then(res => res.json())
             .then(data => {
                 setPriceDynamicsData(data);
+                trackBatch([{
+                    eventName: 'analytics_data_loaded',
+                    category: 'SYSTEM',
+                    properties: {
+                        segment_type: segment,
+                        index_type: priceIndex,
+                        records_count: Array.isArray(data) ? data.length : 0
+                    }
+                }], authenticatedUser?.token);
                 if (Array.isArray(data) && data.length > 0) {
                     trackBatch([{
                         eventName: 'analytics_report_generated',
@@ -101,7 +110,14 @@ function Analytics() {
                     }], authenticatedUser?.token);
                 }
             })
-            .catch(() => console.log('Failed to fetch price dynamics'));
+            .catch(() => {
+                trackBatch([{
+                    eventName: 'analytics_data_error',
+                    category: 'SYSTEM',
+                    properties: { error_code: 'price_dynamics_fetch_failed', segment_type: segment }
+                }], authenticatedUser?.token);
+                console.log('Failed to fetch price dynamics');
+            });
 
     }, [segment, rooms, priceIndex, authenticatedUser]);
 
@@ -118,8 +134,24 @@ function Analytics() {
             .then(data => {
                 setApartmentIndexData(data.points);
                 setApartmentSummary(data.summary);
+                trackBatch([{
+                    eventName: 'analytics_data_loaded',
+                    category: 'SYSTEM',
+                    properties: {
+                        segment_type: 'APARTMENT_PRICE_INDEX',
+                        index_type: 'PER_M2',
+                        records_count: Array.isArray(data.points) ? data.points.length : 0
+                    }
+                }], authenticatedUser?.token);
             })
-            .catch(() => console.log('Failed to fetch apartment index'));
+            .catch(() => {
+                trackBatch([{
+                    eventName: 'analytics_data_error',
+                    category: 'SYSTEM',
+                    properties: { error_code: 'apartment_index_fetch_failed', segment_type: 'APARTMENT_PRICE_INDEX' }
+                }], authenticatedUser?.token);
+                console.log('Failed to fetch apartment index');
+            });
 
     }, [authenticatedUser]);
 
@@ -136,8 +168,24 @@ function Analytics() {
             .then(data => {
                 setRentIndexData(data.points);
                 setRentSummary(data.summary);
+                trackBatch([{
+                    eventName: 'analytics_data_loaded',
+                    category: 'SYSTEM',
+                    properties: {
+                        segment_type: 'RENT_PRICE_INDEX',
+                        index_type: 'TOTAL',
+                        records_count: Array.isArray(data.points) ? data.points.length : 0
+                    }
+                }], authenticatedUser?.token);
             })
-            .catch(() => console.log('Failed to fetch rent index'));
+            .catch(() => {
+                trackBatch([{
+                    eventName: 'analytics_data_error',
+                    category: 'SYSTEM',
+                    properties: { error_code: 'rent_index_fetch_failed', segment_type: 'RENT_PRICE_INDEX' }
+                }], authenticatedUser?.token);
+                console.log('Failed to fetch rent index');
+            });
 
     }, [authenticatedUser]);
 
@@ -154,8 +202,24 @@ function Analytics() {
             .then(data => {
                 setAgentOffersData(data.offers || []);
                 setAgentArchivedData(data.archived || []);
+                trackBatch([{
+                    eventName: 'analytics_data_loaded',
+                    category: 'SYSTEM',
+                    properties: {
+                        segment_type: 'AGENT_STATS',
+                        index_type: 'SHARE',
+                        records_count: (data.offers || []).length + (data.archived || []).length
+                    }
+                }], authenticatedUser?.token);
             })
-            .catch(() => console.log('Failed to fetch agent stats'));
+            .catch(() => {
+                trackBatch([{
+                    eventName: 'analytics_data_error',
+                    category: 'SYSTEM',
+                    properties: { error_code: 'agent_stats_fetch_failed', segment_type: 'AGENT_STATS' }
+                }], authenticatedUser?.token);
+                console.log('Failed to fetch agent stats');
+            });
     }, [authenticatedUser]);
 
 

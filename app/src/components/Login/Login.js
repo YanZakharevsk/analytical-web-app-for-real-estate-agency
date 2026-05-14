@@ -2,6 +2,7 @@ import { useAuth } from "../AuthContext";
 import "./Login.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { trackEvent } from "../../utils/analyticsTrack";
 
 function Login() {
     const [isNotFilled, setIsNotFilled] = useState(true);
@@ -24,6 +25,16 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoginFailure(false);
+        trackEvent({
+            eventName: "login_submit",
+            category: "INTERACTION",
+            properties: {
+                user_email: username,
+                user_password: "[redacted]",
+                timestamp: new Date().toISOString(),
+                auth_method: "email"
+            }
+        });
 
         const body = {
             username: username,
@@ -42,6 +53,15 @@ function Login() {
             if (!response.ok) {
                 console.log("Failed to authenticate: " + response.json);
                 setLoginFailure(true);
+                trackEvent({
+                    eventName: "auth_failed",
+                    category: "SYSTEM",
+                    properties: {
+                        error_reason: "wrong_password_or_no_user",
+                        user_email: username,
+                        login_method: "email"
+                    }
+                });
                 return;
             }
 
@@ -53,6 +73,15 @@ function Login() {
                 username: username,
                 token: data.token
             });
+            trackEvent({
+                eventName: "login_success",
+                category: "CONVERSION",
+                properties: {
+                    user_password: "[redacted]",
+                    auth_type: "email",
+                    user_role: data.role || "unknown"
+                }
+            }, data.token);
 
             const accountButton = document.getElementById("account");
             accountButton.classList.remove("disabled-link");

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../AuthContext';
 import './EstimatePage.css';
 import image from './images (1).jpg';
+import { trackEvent } from '../../utils/analyticsTrack';
 
 
 const estateTypes = [
@@ -48,6 +49,16 @@ function EstimatePage() {
     const handleEstimate = async () => {
         setLoading(true);
         setError(null);
+        trackEvent({
+            eventName: "price_estimation_calculate",
+            category: "INTERACTION",
+            properties: {
+                property_type: form.estateType,
+                area: Number(form.area),
+                rooms_count: Number(form.rooms),
+                location: "unknown"
+            }
+        }, authenticatedUser?.token);
 
         if (!authenticatedUser?.token) {
             setError('Для расчёта необходима авторизация');
@@ -81,6 +92,17 @@ function EstimatePage() {
 
             const data = await response.json();
             setResult(data);
+            if (data?.found) {
+                trackEvent({
+                    eventName: "price_estimation_completed",
+                    category: "CONVERSION",
+                    properties: {
+                        estimation_id: `${Date.now()}`,
+                        property_type: form.estateType,
+                        calculated_price: data.estimatedPrice
+                    }
+                }, authenticatedUser?.token);
+            }
         } catch (err) {
             setError(err.message);
         } finally {

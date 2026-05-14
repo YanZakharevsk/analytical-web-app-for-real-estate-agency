@@ -2,6 +2,7 @@ import './Manage.css';
 import { useAuth } from '../AuthContext.js';
 import { useState, useEffect } from 'react';
 import bullet from './checked.png';
+import { trackEvent } from '../../utils/analyticsTrack';
 
 
 function Manage() {
@@ -33,6 +34,14 @@ function Manage() {
     }, [authenticatedUser, isCancelled, isFinalized]);
 
     const onFinalizeClick = (id) => {
+        trackEvent({
+            eventName: "deal_complete_click",
+            category: "INTERACTION",
+            properties: {
+                deal_id: id,
+                property_id: id
+            }
+        }, authenticatedUser?.token);
         const finalizeOffer = async () => {
             const response = await fetch(`/api/agent/finalize-offer?id=${id}`, {
                 method: "POST",
@@ -48,12 +57,40 @@ function Manage() {
 
             alert("Successfully finalized the offer.");
             setIsFinalized(true);
+            trackEvent({
+                eventName: "deal_completed",
+                category: "CONVERSION",
+                properties: {
+                    deal_id: id,
+                    property_id: id,
+                    final_price: null
+                }
+            }, authenticatedUser?.token);
+            trackEvent({
+                eventName: "deal_status_updated",
+                category: "SYSTEM",
+                properties: {
+                    deal_id: id,
+                    old_status: "RESERVED",
+                    new_status: "COMPLETED",
+                    trigger_reason: "agent_finalize"
+                }
+            }, authenticatedUser?.token);
         }
 
         finalizeOffer();
     }
 
     const onCancelClick = (id) => {
+        trackEvent({
+            eventName: "deal_cancel_click",
+            category: "INTERACTION",
+            properties: {
+                deal_id: id,
+                property_id: id,
+                cancel_reason: "agent_cancelled"
+            }
+        }, authenticatedUser?.token);
         const cancelReservation = async () => {
             const response = await fetch(`/api/unblock-offer?id=${id}`, {
                 method: "PATCH",
@@ -68,6 +105,25 @@ function Manage() {
             }
 
             setIsCancelled(true);
+            trackEvent({
+                eventName: "deal_cancelled",
+                category: "CONVERSION",
+                properties: {
+                    deal_id: id,
+                    property_id: id,
+                    cancel_reason: "agent_cancelled"
+                }
+            }, authenticatedUser?.token);
+            trackEvent({
+                eventName: "deal_status_updated",
+                category: "SYSTEM",
+                properties: {
+                    deal_id: id,
+                    old_status: "RESERVED",
+                    new_status: "CANCELLED",
+                    trigger_reason: "agent_cancel"
+                }
+            }, authenticatedUser?.token);
         }
 
         cancelReservation();

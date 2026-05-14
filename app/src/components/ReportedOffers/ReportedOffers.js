@@ -4,6 +4,7 @@ import './ReportedOffers.css';
 import PhotosFetcher from '../../PhotosFetcher';
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { trackEvent } from '../../utils/analyticsTrack';
 
 function ReportedOffers() {
     const { authenticatedUser } = useAuth();
@@ -66,11 +67,18 @@ function ReportedOffers() {
 
     const onConfirmClick = async (e, id) => {
         e.preventDefault();
+        const estate = reportedEstates.find(e => e.id === id);
+        trackEvent({
+            eventName: "application_approve_click",
+            category: "INTERACTION",
+            properties: {
+                property_id: id,
+                edited_price: estate?.price
+            }
+        }, authenticatedUser?.token);
 
         setSuccessMsg('');
         setErrorMsg('');
-
-        const estate = reportedEstates.find(e => e.id === id);
 
         const body = {
             price: estate.price,
@@ -93,9 +101,25 @@ function ReportedOffers() {
 
         setSuccessMsg('Объявление успешно подтверждено');
         setReportedEstates(prev => prev.filter(e => e.id !== id));
+        trackEvent({
+            eventName: "listing_published",
+            category: "CONVERSION",
+            properties: {
+                listing_id: id,
+                edited_price: estate?.price
+            }
+        }, authenticatedUser?.token);
     };
 
     const onRejectClick = async (id) => {
+        trackEvent({
+            eventName: "application_reject_click",
+            category: "INTERACTION",
+            properties: {
+                property_id: id,
+                reject_reason: "realtor_rejected"
+            }
+        }, authenticatedUser?.token);
         setSuccessMsg('');
         setErrorMsg('');
 

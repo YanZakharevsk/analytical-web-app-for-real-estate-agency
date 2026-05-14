@@ -13,6 +13,7 @@ import size from './size.png';
 import stairs from './stairs.png';
 import redHeart from './heart-red.png';
 import heart from './heart.png';
+import { trackEvent, getCurrentScreenOrigin } from '../../utils/analyticsTrack';
 
 const OfferCard = () => {
     const { id } = useParams();
@@ -122,6 +123,22 @@ const OfferCard = () => {
             }
 
             setIsBlocked(true);
+            trackEvent({
+                eventName: "meeting_slot_select",
+                category: "INTERACTION",
+                properties: {
+                    property_id: Number(id),
+                    selected_date: new Date().toISOString()
+                }
+            }, authenticatedUser?.token);
+            trackEvent({
+                eventName: "meeting_scheduled",
+                category: "CONVERSION",
+                properties: {
+                    property_id: Number(id),
+                    meet: "reservation_created"
+                }
+            }, authenticatedUser?.token);
         }
 
         blockOffer();
@@ -166,6 +183,22 @@ const OfferCard = () => {
             }
 
             setIsFavorite(true);
+            trackEvent({
+                eventName: "add_to_favorites_click",
+                category: "INTERACTION",
+                properties: {
+                    property_id: offer.info.id,
+                    screen_origin: getCurrentScreenOrigin()
+                }
+            }, authenticatedUser?.token);
+            trackEvent({
+                eventName: "property_added_to_favorites",
+                category: "CONVERSION",
+                properties: {
+                    property_id: offer.info.id,
+                    screen_origin: getCurrentScreenOrigin()
+                }
+            }, authenticatedUser?.token);
         }
 
         const removeFavorite =  async () => {
@@ -182,6 +215,13 @@ const OfferCard = () => {
             }
 
             setIsFavorite(false);
+            trackEvent({
+                eventName: "remove_from_favorites_click",
+                category: "INTERACTION",
+                properties: {
+                    property_id: offer.info.id
+                }
+            }, authenticatedUser?.token);
         }
 
         if (isFavorite) {

@@ -45,3 +45,18 @@ export function trackBatch(events, token) {
         body: JSON.stringify(body)
     }).catch(() => {});
 }
+
+export function trackEvent(event, token) {
+    if (!event || !event.eventName || !event.category) {
+        return Promise.resolve();
+    }
+    return trackBatch([event], token);
+}
+
+export function getCurrentScreenOrigin() {
+    try {
+        return window.location?.pathname || 'unknown';
+    } catch {
+        return 'unknown';
+    }
+}
