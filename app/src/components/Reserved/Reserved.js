@@ -35,6 +35,12 @@ function Reserved() {
     }
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Бронь</h2>
+                <p>Ваши зарезервированные объекты.</p>
+            </section>
+            <div className="re-inner">
         <div className='reserved'>
             <h4>Зарезервированные</h4>
             <hr></hr>
@@ -65,6 +71,8 @@ function Reserved() {
                 <p>У вас пока нет зарезервированных предложений.</p>
             )}
 
+        </div>
+            </div>
         </div>
     );
 }

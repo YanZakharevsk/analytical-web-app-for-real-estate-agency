@@ -1,36 +1,35 @@
-.admin-panel {
-    padding: 30px 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    margin-top: 30px;
+.admin-global-error {
+  margin-bottom: 16px;
 }
 
-.admin-panel h2 {
-    margin-bottom: 20px;
-    color: #343a40;
-    text-align: center;
+.admin-table-wrap {
+  margin-top: 8px;
 }
 
-.table-responsive {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+.admin-input-username,
+.admin-select-role {
+  width: 100%;
+  max-width: 220px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 0.95rem;
 }
 
-.table th, .table td {
-    vertical-align: middle !important;
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
-select.form-select {
-    min-width: 130px;
+.admin-btn-sm {
+  padding: 8px 14px !important;
+  font-size: 0.88rem;
 }
 
-button.btn-sm {
-    min-width: 80px;
-}
-
-.badge.bg-success {
-    font-size: 0.9rem;
-    padding: 0.5em 0.75em;
+.admin-row-msg {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
 }

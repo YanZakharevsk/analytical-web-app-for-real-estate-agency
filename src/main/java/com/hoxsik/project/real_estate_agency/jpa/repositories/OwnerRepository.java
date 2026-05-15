@@ -10,6 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
+    Optional<Owner> findByUser_Id(Long userId);
+
+    @Query("SELECT DISTINCT o FROM Owner o LEFT JOIN FETCH o.estates WHERE o.user.id = :userId")
+    Optional<Owner> findByUser_IdWithEstates(@Param("userId") Long userId);
+
     @Query( "SELECT o FROM Owner o " +
             "JOIN User u ON u.id = o.user.id " +
             "WHERE u.username = :username")

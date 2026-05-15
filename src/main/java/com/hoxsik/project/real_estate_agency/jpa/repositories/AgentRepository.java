@@ -10,6 +10,8 @@ import java.util.Optional;
 
 @Repository
 public interface AgentRepository extends JpaRepository<Agent, Long> {
+    Optional<Agent> findByUser_Id(Long userId);
+
     @Query( "SELECT a FROM Agent a " +
     "JOIN User u ON u.id = a.user.id " +
     "WHERE u.username = :username")

@@ -1,20 +1,28 @@
 package com.hoxsik.project.real_estate_agency.services;
 
+import com.hoxsik.project.real_estate_agency.dto.Mapper;
 import com.hoxsik.project.real_estate_agency.dto.request.OfferRequest;
+import com.hoxsik.project.real_estate_agency.dto.response.OfferPreviewResponse;
 import com.hoxsik.project.real_estate_agency.dto.response.Response;
 import com.hoxsik.project.real_estate_agency.jpa.entities.Customer;
 import com.hoxsik.project.real_estate_agency.jpa.entities.Estate;
 import com.hoxsik.project.real_estate_agency.jpa.entities.Offer;
+import com.hoxsik.project.real_estate_agency.jpa.entities.enums.estate.Availability;
+import com.hoxsik.project.real_estate_agency.jpa.entities.enums.estate.Condition;
+import com.hoxsik.project.real_estate_agency.jpa.entities.enums.estate.EstateType;
 import com.hoxsik.project.real_estate_agency.jpa.repositories.OfferRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -44,16 +52,68 @@ public class OfferService {
         return new Response(true, HttpStatus.CREATED, "Successfully posted the offer");
     }
 
-    public Optional<List<Offer>> getFilteredOffers(Integer bathrooms, Integer rooms, Boolean garage, Integer storey,
-                                                   String location, Boolean balcony, Double size, String condition,
-                                                   String type, String availability, Double priceFrom, Double priceTo,
-                                                   LocalDateTime postFrom, LocalDateTime postTo) {
+    @Transactional(readOnly = true)
+    public Page<OfferPreviewResponse> getFilteredOffersPage(Integer bathrooms, Integer rooms, Boolean garage, Integer storey,
+                                             String location, Boolean balcony, Double size, String condition,
+                                             String type, String availability, Double priceFrom, Double priceTo,
+                                             LocalDateTime postFrom, LocalDateTime postTo,
+                                             Pageable pageable) {
+        validateOfferListingParams(type, availability, condition, bathrooms, rooms, storey, location, size, priceFrom, priceTo);
+        String loc = (location != null && location.isBlank()) ? null : location;
+        Page<Estate> estatePage = estateService.getFilteredEstatesPage(
+                bathrooms, rooms, garage, storey, loc, balcony, size, condition,
+                type, availability, priceFrom, priceTo, postFrom, postTo, pageable);
+        return estatePage.map(offerRepository::findByEstate).map(Mapper.INSTANCE::convertOfferPreview);
+    }
 
-        Optional<List<Estate>> optionalEstates = estateService.getFilteredEstates(bathrooms, rooms, garage, storey, location,
-                balcony, size, condition, type, availability,
-                priceFrom, priceTo, postFrom, postTo);
-
-        return optionalEstates.map(estates -> estates.stream().map(offerRepository::findByEstate).toList());
+    private void validateOfferListingParams(String type, String availability, String condition,
+                                            Integer bathrooms, Integer rooms, Integer storey, String location,
+                                            Double size, Double priceFrom, Double priceTo) {
+        if (type != null && !type.isBlank()) {
+            try {
+                EstateType.valueOf(type.trim().toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Некорректный параметр type");
+            }
+        }
+        if (availability != null && !availability.isBlank()) {
+            try {
+                Availability.valueOf(availability.trim().toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Некорректный параметр availability");
+            }
+        }
+        if (condition != null && !condition.isBlank()) {
+            try {
+                Condition.valueOf(condition.trim().toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Некорректный параметр condition");
+            }
+        }
+        if (bathrooms != null && (bathrooms < 0 || bathrooms > 99)) {
+            throw new IllegalArgumentException("Некорректное значение bathrooms");
+        }
+        if (rooms != null && (rooms < 0 || rooms > 99)) {
+            throw new IllegalArgumentException("Некорректное значение rooms");
+        }
+        if (storey != null && (storey < 0 || storey > 200)) {
+            throw new IllegalArgumentException("Некорректное значение storey");
+        }
+        if (location != null && location.length() > 500) {
+            throw new IllegalArgumentException("Слишком длинная строка location");
+        }
+        if (size != null && (size <= 0 || size > 100_000)) {
+            throw new IllegalArgumentException("Некорректное значение size");
+        }
+        if (priceFrom != null && priceFrom < 0) {
+            throw new IllegalArgumentException("priceFrom не может быть отрицательным");
+        }
+        if (priceTo != null && priceTo < 0) {
+            throw new IllegalArgumentException("priceTo не может быть отрицательным");
+        }
+        if (priceFrom != null && priceTo != null && priceFrom > priceTo) {
+            throw new IllegalArgumentException("priceFrom не может быть больше priceTo");
+        }
     }
 
     @Transactional

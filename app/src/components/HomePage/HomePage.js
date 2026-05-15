@@ -3,6 +3,7 @@ import logo from '../logo2.jpg';
 
 function HomePage() {
     return (
+        <div className="re-page re-page--transparent">
         <div className="homepage">
             {/* Hero Section - на всю ширину */}
             <section className="hero">
@@ -114,6 +115,7 @@ function HomePage() {
                     </div>
                 </div>
             </section>
+        </div>
         </div>
     );
 }

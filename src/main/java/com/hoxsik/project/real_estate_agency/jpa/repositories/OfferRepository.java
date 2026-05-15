@@ -16,6 +16,10 @@ import java.util.Optional;
 
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, Long> {
+    List<Offer> findByCustomers_Id(Long customerId);
+
+    List<Offer> findByBlockedBy_Id(Long customerId);
+
     /**
      * Retrieves the offer by the specified estate
      * @param estate Estate which is included in the offer

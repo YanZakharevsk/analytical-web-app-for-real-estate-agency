@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
     Optional<List<Calendar>> findByAgent(Agent agent);
+
+    void deleteByAgent_Id(Long agentId);
 }
 
 

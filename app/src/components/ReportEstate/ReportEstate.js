@@ -3,6 +3,7 @@ import "./ReportEstate.css";
 import { useEffect, useState } from 'react';
 import bullet from './checked.png';
 import { trackEvent } from '../../utils/analyticsTrack';
+import { readApiErrorMessage } from '../../utils/readApiError.js';
 
 function ReportEstate() {
     const { authenticatedUser } = useAuth();
@@ -24,6 +25,7 @@ function ReportEstate() {
     const [photos, setPhotos] = useState([]);
     const [isPhotoAdded, setIsPhotoAdded] = useState(false);
     const [isDocumentAdded, setIsDocumentAdded] = useState(false);
+    const [submitError, setSubmitError] = useState('');
 
     useEffect(() => {
         const fetchAgents = async () => {
@@ -64,6 +66,7 @@ function ReportEstate() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setSubmitError('');
         trackEvent({
             eventName: "add_listing_submit",
             category: "INTERACTION",
@@ -110,7 +113,8 @@ function ReportEstate() {
             });
 
             if (!response.ok) {
-                console.log("Failed to post the offer");
+                const msg = await readApiErrorMessage(response);
+                setSubmitError(msg);
                 trackEvent({
                     eventName: "listing_validation_error",
                     category: "SYSTEM",
@@ -200,10 +204,14 @@ function ReportEstate() {
     };
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Заявка на объект</h2>
+                <p>Заполните форму — агенты рассмотрят ваше предложение.</p>
+            </section>
+            <div className="re-inner">
+            <div className="re-surface">
         <div className="report-estate">
-            <h2 className="lead">Сообщите о своей недвижимости</h2>
-            <h6>Заполните форму, и наши лучшие агенты рассмотрят ваше предложение.</h6>
-            <hr></hr>
             <form>
                 <p>Агент</p>
                 <div>
@@ -333,8 +341,16 @@ function ReportEstate() {
              
                   
             </div>
+            {submitError && (
+                <div className="alert alert-danger" role="alert" style={{ marginBottom: '12px' }}>
+                    {submitError}
+                </div>
+            )}
             <button className="btn btn-dark submit-btn" disabled={!isFormFilled()} onClick={handleSubmit}>Подтвердить</button>
             
+        </div>
+            </div>
+            </div>
         </div>
     );
 }

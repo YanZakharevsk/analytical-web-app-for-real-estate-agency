@@ -40,6 +40,7 @@ public class MeetingService {
         meeting.setRole(user.get().getRole());
 
         meetingRepository.save(meeting);
+        calendarService.deleteCalendar(calendar.get());
 
         return new Response(true, HttpStatus.CREATED, "Успешно запланировали встречу");
     }

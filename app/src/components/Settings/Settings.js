@@ -1,96 +1,130 @@
 import './Settings.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../AuthContext';
 import user from './user.png';
 import padlock from './padlock.png';
 import pass from './pass.png';
+import { readApiErrorMessage } from '../../utils/readApiError.js';
 
 function Settings() {
-    const { authenticatedUser } = useAuth();
+    const { authenticatedUser, setAuthenticatedUser } = useAuth();
     const [details, setDetails] = useState(null);
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [username, setUsername] = useState("");
 
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [repeatPassword, setRepeatPassword] = useState("");
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [username, setUsername] = useState('');
 
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [isFailed, setIsFailed] = useState({
-        status: false,
-        info: ""
-    });
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
 
-    const isAnyCredentialFilled = () => {
-        return firstName !== "" || lastName !== "" || email !== "" || phone !== "" || username !== "";
-    }
+    const [credentialsOk, setCredentialsOk] = useState(false);
+    const [credentialsErr, setCredentialsErr] = useState('');
+    const [passwordOk, setPasswordOk] = useState(false);
+    const [passwordErr, setPasswordErr] = useState('');
 
-    const arePasswordsFilled = () => {
-        return currentPassword !== "" && newPassword !== "" && repeatPassword != "";
-    }
+    const applyDetails = useCallback((data) => {
+        if (!data) {
+            return;
+        }
+        setDetails(data);
+        setFirstName(data.firstName ?? '');
+        setLastName(data.lastName ?? '');
+        setEmail(data.email ?? '');
+        setPhone(data.phoneNumber ?? '');
+        setUsername(data.username ?? '');
+    }, []);
 
     useEffect(() => {
         const fetchDetails = async () => {
+            if (!authenticatedUser?.token) {
+                return;
+            }
             const response = await fetch('/api/user-details', {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                    "Authorization": "Bearer " + authenticatedUser.token
-                }
+                    Authorization: 'Bearer ' + authenticatedUser.token,
+                },
             });
 
             if (!response.ok) {
-                console.log("Failed to fetch details");
                 return;
-            };
-
+            }
             const data = await response.json();
-            setDetails(data);
+            applyDetails(data);
         };
 
         fetchDetails();
+    }, [authenticatedUser?.token, applyDetails]);
 
-    }, [authenticatedUser, isSuccess]);
+    const buildCredentialsPatch = () => {
+        if (!details) {
+            return null;
+        }
+        const body = {};
+        if (firstName.trim() !== (details.firstName ?? '')) {
+            body.firstName = firstName.trim();
+        }
+        if (lastName.trim() !== (details.lastName ?? '')) {
+            body.lastName = lastName.trim();
+        }
+        if (email.trim() !== (details.email ?? '')) {
+            body.email = email.trim();
+        }
+        if (phone.trim() !== (details.phoneNumber ?? '')) {
+            body.phoneNumber = phone.trim();
+        }
+        if (username.trim() !== (details.username ?? '')) {
+            body.username = username.trim();
+        }
+        return Object.keys(body).length ? body : null;
+    };
 
     const onCredentialsSubmit = (e) => {
         e.preventDefault();
+        setCredentialsErr('');
+        setCredentialsOk(false);
+        setPasswordErr('');
+        setPasswordOk(false);
+
+        const body = buildCredentialsPatch();
+        if (!body) {
+            setCredentialsErr('Измените хотя бы одно поле, чтобы сохранить.');
+            return;
+        }
 
         const updateCredentials = async () => {
-            const body = {
-                firstName: firstName,
-                lastName: lastName,
-                username: username,
-                phoneNumber: phone,
-                email: email
-            };
-
             const response = await fetch('/api/update-credentials', {
-                method: "PATCH",
+                method: 'PATCH',
                 headers: {
-                    "Authorization": "Bearer " + authenticatedUser.token,
-                    "Content-Type": "application/json"
+                    Authorization: 'Bearer ' + authenticatedUser.token,
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(body)
+                body: JSON.stringify(body),
             });
 
             if (!response.ok) {
-                console.log("Failed to update credentials");
-
-                setIsFailed({
-                    status: true,
-                    info: response
-                });
-
-                setIsSuccess(false);
-
+                setCredentialsErr(await readApiErrorMessage(response));
                 return;
             }
 
-            setIsSuccess(true);
-            setIsFailed(false);
-            setDetails(body);
+            const refreshed = await fetch('/api/user-details', {
+                method: 'GET',
+                headers: { Authorization: 'Bearer ' + authenticatedUser.token },
+            });
+            if (refreshed.ok) {
+                const data = await refreshed.json();
+                applyDetails(data);
+            }
+            if (body.username && body.username !== authenticatedUser.username) {
+                setAuthenticatedUser({
+                    username: body.username,
+                    token: authenticatedUser.token,
+                });
+            }
+            setCredentialsOk(true);
         };
 
         updateCredentials();
@@ -98,121 +132,145 @@ function Settings() {
 
     const onPasswordSubmit = (e) => {
         e.preventDefault();
+        setPasswordErr('');
+        setPasswordOk(false);
+        setCredentialsErr('');
+        setCredentialsOk(false);
 
         if (newPassword !== repeatPassword) {
-            setIsFailed({
-                status: true,
-                info: "Provided passwords don't match"
-            });
-
+            setPasswordErr('Новый пароль и подтверждение не совпадают.');
             return;
         }
 
         const updatePasswords = async () => {
-            const body = {
-                oldPassword: currentPassword,
-                newPassword: newPassword
-            };
-
             const response = await fetch('/api/update-password', {
-                method: "PATCH",
+                method: 'PATCH',
                 headers: {
-                    "Authorization": "Bearer " + authenticatedUser.token,
-                    "Content-Type": "application/json"
+                    Authorization: 'Bearer ' + authenticatedUser.token,
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(body)
+                body: JSON.stringify({
+                    oldPassword: currentPassword,
+                    newPassword: newPassword,
+                }),
             });
 
             if (!response.ok) {
-                console.log("Failed to update passwords");
-
-                setIsFailed({
-                    status: true,
-                    info: response
-                });
-
-                setIsSuccess(false);
-
+                setPasswordErr(await readApiErrorMessage(response));
                 return;
-            };
+            }
 
-            setIsSuccess(true);
-            setIsFailed(false);
+            setPasswordOk(true);
+            setCurrentPassword('');
+            setNewPassword('');
+            setRepeatPassword('');
         };
 
         updatePasswords();
     };
 
     return (
-        <div className='settings'>
-            <h4>Управление своей учетной записью</h4>
-            <hr></hr>
-            <div className='account-info'>
-                <img src={user}/>
-                <div className='info'>
-                    {details !== null && <h3>{details.firstName + " " + details.lastName}</h3>}
-                    {details !== null && <p>{details.email}</p>}
-                    {details !== null && <p>{details.phoneNumber}</p>}
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Настройки аккаунта</h2>
+                <p>Обновляйте отдельные поля — отправляются только изменённые данные.</p>
+            </section>
+            <div className="re-inner">
+                <div className="settings-layout">
+                    <div className="re-surface settings-profile">
+                        <div className="account-info">
+                            <img src={user} alt="" width={56} height={56} />
+                            <div className="info">
+                                {details && (
+                                    <h3>
+                                        {details.firstName} {details.lastName}
+                                    </h3>
+                                )}
+                                {details && <p className="re-muted">{details.email}</p>}
+                                {details && <p className="re-muted">{details.phoneNumber}</p>}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="re-surface">
+                        <div className="credentials-header">
+                            <h3 className="re-section-title">Учётные данные</h3>
+                            <img src={pass} alt="" width={28} height={28} />
+                        </div>
+                        <div className="re-form-grid">
+                            <div className="re-field">
+                                <label htmlFor="firstName">Имя</label>
+                                <input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                            </div>
+                            <div className="re-field">
+                                <label htmlFor="lastName">Фамилия</label>
+                                <input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                            </div>
+                            <div className="re-field">
+                                <label htmlFor="username">Логин</label>
+                                <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+                            </div>
+                            <div className="re-field">
+                                <label htmlFor="email">Email</label>
+                                <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+                            <div className="re-field">
+                                <label htmlFor="phone">Телефон (+375XXXXXXXXX)</label>
+                                <input id="phone" type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="re-btn-row">
+                            <button type="button" className="re-btn-primary" onClick={onCredentialsSubmit}>
+                                Сохранить изменения
+                            </button>
+                        </div>
+                        {credentialsOk && <div className="re-alert re-alert-success">Данные профиля обновлены.</div>}
+                        {credentialsErr && <div className="re-alert re-alert-error">{credentialsErr}</div>}
+                    </div>
+
+                    <div className="re-surface">
+                        <div className="credentials-header">
+                            <h3 className="re-section-title">Пароль</h3>
+                            <img src={padlock} alt="" width={28} height={28} />
+                        </div>
+                        <div className="re-form-grid">
+                            <div className="re-field">
+                                <label htmlFor="oldPassword">Текущий пароль</label>
+                                <input
+                                    id="oldPassword"
+                                    type="password"
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                />
+                            </div>
+                            <div className="re-field">
+                                <label htmlFor="newPassword">Новый пароль</label>
+                                <input id="newPassword" type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                            </div>
+                            <div className="re-field">
+                                <label htmlFor="repeatPassword">Повторите пароль</label>
+                                <input
+                                    id="repeatPassword"
+                                    type="password"
+                                    value={repeatPassword}
+                                    onChange={(e) => setRepeatPassword(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="re-btn-row">
+                            <button
+                                type="button"
+                                className="re-btn-primary"
+                                disabled={!currentPassword || !newPassword || !repeatPassword}
+                                onClick={onPasswordSubmit}
+                            >
+                                Сменить пароль
+                            </button>
+                        </div>
+                        {passwordOk && <div className="re-alert re-alert-success">Пароль успешно изменён.</div>}
+                        {passwordErr && <div className="re-alert re-alert-error">{passwordErr}</div>}
+                    </div>
                 </div>
-            </div>
-            <div className='edit-credentials'>
-                <div className='credentials'>
-                    <div className='header'>
-                        <h5>
-                            Обновить учетные данные</h5>
-                        <img src={pass}/>
-                    </div>
-                    <div>
-                        <label htmlFor='firstName'>Имя</label>
-                        <input type='text' id='firstName' onChange={(e) => setFirstName(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='lastName'>Фамилия</label>
-                        <input type='text' id='lastName' onChange={(e) => setLastName(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='username'>Логин</label>
-                        <input type='text' id='username' onChange={(e) => setUsername(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='email'>Email</label>
-                        <input type='email' id='email' onChange={(e) => setEmail(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='phone'>Номер телефона</label>
-                        <input type='phone' onChange={(e) => setPhone(e.target.value)} pattern="[0-9]{3} [0-9]{3}, [0-9]{3}"></input>
-                    </div>
-                    <button className='btn btn-dark' disabled={!isAnyCredentialFilled()} onClick={onCredentialsSubmit}>Обновить</button>
-                </div>
-                <div className='password'>
-                    <div className='header'>
-                        <h5>Обновить пароль</h5>
-                        <img src={padlock}/>
-                    </div>
-                    <div>
-                        <label htmlFor='oldPassword'>Текущий пароль</label>
-                        <input type='password' id='oldPassword' onChange={(e) => setCurrentPassword(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='newPassword'>Новый пароль</label>
-                        <input type='password' id='newPassword' onChange={(e) => setNewPassword(e.target.value)}></input>
-                    </div>
-                    <div>
-                        <label htmlFor='repeatPassword'>Повторите пароль</label>
-                        <input type='password' id='repeatPassword' onChange={(e) => setRepeatPassword(e.target.value)}></input>
-                    </div>
-                    <button className='btn btn-dark' disabled={!arePasswordsFilled()} onClick={onPasswordSubmit}>Сбросить пароль</button>
-                </div>
-                {isSuccess && (
-                    <div className='alert alert-success'>
-                        Успешное обновление пользовательской информации
-                    </div>
-                )}
-                {isFailed.status && (
-                    <div className='alert alert-danger'>
-                        Не удалось обновить информацию о пользователе: {isFailed.info}
-                    </div>
-                )}
             </div>
         </div>
     );

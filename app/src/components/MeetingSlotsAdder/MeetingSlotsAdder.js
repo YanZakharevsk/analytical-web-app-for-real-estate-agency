@@ -56,6 +56,12 @@ function MeetingSlotsAdder() {
     }
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Слоты встреч</h2>
+                <p>Добавьте доступное время для клиентов.</p>
+            </section>
+            <div className="re-inner">
         <div className='meeting-slots'>
             <h1 className='lead'>Добро пожаловать, Агент!</h1>
             <p>Здесь вы можете удобно указать доступное время для встреч с клиентами.
@@ -104,6 +110,8 @@ function MeetingSlotsAdder() {
             ) : (
                 <div></div>
             )}
+        </div>
+            </div>
         </div>
     )
 }

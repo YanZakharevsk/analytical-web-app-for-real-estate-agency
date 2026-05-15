@@ -11,6 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+    Optional<Review> findByArchivedOffer_Id(Long archivedOfferId);
+
     /**
      * Retrieves reviews by the specified agent ID
      * @param id ID of the agent

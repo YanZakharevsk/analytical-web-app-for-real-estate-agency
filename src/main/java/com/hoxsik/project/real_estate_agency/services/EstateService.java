@@ -7,6 +7,8 @@ import com.hoxsik.project.real_estate_agency.jpa.entities.Estate;
 import com.hoxsik.project.real_estate_agency.jpa.entities.Owner;
 import com.hoxsik.project.real_estate_agency.jpa.repositories.EstateRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,13 +58,21 @@ public class EstateService {
         return estateRepository.findById(id);
     }
 
-    public Optional<List<Estate>> getFilteredEstates(Integer bathrooms, Integer rooms, Boolean garage, Integer storey,
-                                                     String location, Boolean balcony, Double size, String condition,
-                                                     String type, String availability, Double priceFrom, Double priceTo,
-                                                     LocalDateTime postFrom, LocalDateTime postTo) {
-
+    public List<Estate> getFilteredEstates(Integer bathrooms, Integer rooms, Boolean garage, Integer storey,
+                                           String location, Boolean balcony, Double size, String condition,
+                                           String type, String availability, Double priceFrom, Double priceTo,
+                                           LocalDateTime postFrom, LocalDateTime postTo) {
         return estateRepository.findAll(EstateFilter.filterEstates(type, bathrooms, rooms, garage, storey, location, balcony,
                 availability, size, condition, priceFrom, priceTo, postFrom, postTo));
+    }
+
+    public Page<Estate> getFilteredEstatesPage(Integer bathrooms, Integer rooms, Boolean garage, Integer storey,
+                                               String location, Boolean balcony, Double size, String condition,
+                                               String type, String availability, Double priceFrom, Double priceTo,
+                                               LocalDateTime postFrom, LocalDateTime postTo,
+                                               Pageable pageable) {
+        return estateRepository.findAll(EstateFilter.filterEstates(type, bathrooms, rooms, garage, storey, location, balcony,
+                availability, size, condition, priceFrom, priceTo, postFrom, postTo), pageable);
     }
 
     public Optional<List<Estate>> getByOwnerUsername(String username) {

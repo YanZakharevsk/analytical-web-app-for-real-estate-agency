@@ -79,12 +79,20 @@ function Account() {
     }, [role]);
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Личный кабинет</h2>
+                <p>С возвращением, {authenticatedUser.username}!</p>
+            </section>
+            <div className="re-inner">
+                <div className="re-surface account-surface">
         <div className="account">
             <div>
-                <h2 className="lead">С возвращением {authenticatedUser.username}!</h2>
-                <p>Здесь вы можете управлять данными и настройками своего аккаунта. Ваш аккаунт это доступ ко всем функциям и услугам нашего агентства. Контролируйте свой профиль, обновляйте информацию и обеспечьте, чтобы работа с нашим сервисом была максимально персонализирована под ваши потребности.
+                <p className="re-muted">
+                    Здесь вы можете управлять данными и настройками своего аккаунта. Ваш аккаунт — это доступ ко всем
+                    функциям и услугам агентства.
                 </p>
-                <hr></hr>
+                <hr className="re-hr" />
                 <div className="actions">
                     {role === "CUSTOMER" && (
                         <>
@@ -161,6 +169,9 @@ function Account() {
                             ))}
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
                 </div>
             </div>
         </div>

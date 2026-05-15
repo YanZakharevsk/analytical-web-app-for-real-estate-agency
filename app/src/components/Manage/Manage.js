@@ -130,6 +130,12 @@ function Manage() {
     } 
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Управление бронью</h2>
+                <p>Зарезервированные предложения.</p>
+            </section>
+            <div className="re-inner">
         <div className="manage-reserved">
             <h4>Управление зарезервированными предложениями</h4>
             <hr></hr>
@@ -162,6 +168,8 @@ function Manage() {
             ) : (
                 <p>Пока ни одного бронирования не сделано.</p>
             )}
+        </div>
+            </div>
         </div>
     )
 }

@@ -113,6 +113,13 @@ function MyEstates() {
 
 
      return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Моё имущество</h2>
+                <p>Объекты, которыми вы управляете через агентство.</p>
+            </section>
+            <div className="re-inner">
+            <div className="re-surface">
         <div className="my-estates">
             <h2 className="lead">Вот предложения, управление которыми вы доверили нам.</h2>
             <hr></hr>
@@ -190,6 +197,9 @@ function MyEstates() {
                         </div>
                     </div>
                 ))}
+            </div>
+        </div>
+            </div>
             </div>
         </div>
      );

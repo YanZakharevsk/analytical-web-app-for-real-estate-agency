@@ -6,11 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
     Optional<Document> findByFilename(String filename);
+
+    List<Document> findByEstate_Id(Long estateId);
 
     @Query("SELECT d FROM Document d " +
             "JOIN Estate e ON e = d.estate " +

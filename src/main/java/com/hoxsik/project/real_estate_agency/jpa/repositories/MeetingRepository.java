@@ -12,6 +12,10 @@ import java.util.Optional;
 
 @Repository
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
+    void deleteByUser_Id(Long userId);
+
+    void deleteByAgent_Id(Long agentId);
+
     /**
      * Retrieves all the agent's meetings
      * @param username Username of the agent

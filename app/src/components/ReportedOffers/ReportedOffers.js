@@ -143,6 +143,12 @@ function ReportedOffers() {
 
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Заявки на публикацию</h2>
+                <p>Объекты, ожидающие решения агента.</p>
+            </section>
+            <div className="re-inner">
         <div className='reported-offers'>
             <h4>Управление зарегистрированными объектами недвижимости</h4>
             <hr></hr>
@@ -227,6 +233,8 @@ function ReportedOffers() {
             )}
             {successMsg && <div className="offer-msg success">{successMsg}</div>}
             {errorMsg && <div className="offer-msg error">{errorMsg}</div>}
+        </div>
+            </div>
         </div>
     );
 }

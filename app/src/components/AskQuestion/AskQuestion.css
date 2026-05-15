@@ -13,3 +13,10 @@
     justify-content: center;
     gap: 20px;
 }
+
+.ask-question-error {
+    color: #b91c1c;
+    margin: 0;
+    text-align: center;
+    max-width: 420px;
+}

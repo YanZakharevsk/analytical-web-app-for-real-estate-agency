@@ -4,8 +4,8 @@ import com.hoxsik.project.real_estate_agency.jpa.entities.Agent;
 import com.hoxsik.project.real_estate_agency.jpa.entities.Estate;
 import com.hoxsik.project.real_estate_agency.jpa.entities.enums.estate.Availability;
 import com.hoxsik.project.real_estate_agency.jpa.entities.enums.estate.EstateType;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EstateRepository extends JpaRepository<Estate, Long> {
+public interface EstateRepository extends JpaRepository<Estate, Long>, JpaSpecificationExecutor<Estate> {
     /**
      * Retrieves all estates assigned to the agent
      * @param agent Agent to whom estates are assigned
@@ -38,14 +38,6 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
       AND ao IS NULL
 """)
     Optional<List<Estate>> findReportedEstatesByAgent(@Param("agent") Agent agent);
-
-
-    /**
-     * Retrieves all the estates that match specified predicates
-     * @param specification Specification containing predicates
-     * @return List of estates if are present, empty otherwise
-     */
-    Optional<List<Estate>> findAll(Specification<Estate> specification);
 
     /**
      * Retrieves all the estates for the specified owner

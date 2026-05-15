@@ -15,6 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface ArchivedOfferRepository extends JpaRepository<ArchivedOffer, Long> {
+    List<ArchivedOffer> findByCustomer_Id(Long customerId);
+
     /**
      * Retrieves archived unreviewed customer's transactions
      * @param username Username of the customer

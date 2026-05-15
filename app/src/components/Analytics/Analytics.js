@@ -226,6 +226,7 @@ function Analytics() {
 
 
     return (
+        <div className="re-page re-page--transparent">
         <div className="analytics">
 
             <h2>Аналитика рынка недвижимости</h2>
@@ -564,6 +565,7 @@ function Analytics() {
                 </Link>
             </section>
 
+        </div>
         </div>
     );
 }

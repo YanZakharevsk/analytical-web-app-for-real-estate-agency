@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { trackEvent } from "../../utils/analyticsTrack";
 
 function Login() {
-    const [isNotFilled, setIsNotFilled] = useState(true);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const { setAuthenticatedUser } = useAuth();
@@ -14,23 +13,24 @@ function Login() {
 
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
-        setIsNotFilled(false);
     }
 
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
-        setIsNotFilled(false);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setLoginFailure(false);
+        if (!username.trim() || !password.trim()) {
+            setLoginFailure(true);
+            return;
+        }
         trackEvent({
             eventName: "login_submit",
             category: "INTERACTION",
             properties: {
                 user_email: username,
-                user_password: "[redacted]",
                 timestamp: new Date().toISOString(),
                 auth_method: "email"
             }
@@ -77,7 +77,6 @@ function Login() {
                 eventName: "login_success",
                 category: "CONVERSION",
                 properties: {
-                    user_password: "[redacted]",
                     auth_type: "email",
                     user_role: data.role || "unknown"
                 }
@@ -94,7 +93,6 @@ function Login() {
         e.preventDefault();
 
         setIsAuthenticated(false);
-        setIsNotFilled(true);
         setLoginFailure(false);
 
         if (password !== "" || username !== "") {
@@ -104,16 +102,26 @@ function Login() {
     }
 
     return (
-        <div className="login">
-            <h3 className="lead">Войдите, чтобы получить полный доступ</h3>
-            <hr></hr>
-            <form className="form">
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Вход</h2>
+                <p>Авторизуйтесь для доступа к избранному, бронированию и личному кабинету.</p>
+            </section>
+            <div className="re-inner re-inner--narrow">
+                <div className="re-surface login">
+            <form className="form" onSubmit={(e) => e.preventDefault()}>
                 <label>Логин</label>
                 <input type="text" value={username} onChange={handleUsernameChange}></input>
                 <label>Пароль</label>
                 <input type="password" value={password} onChange={handlePasswordChange}></input>
                 <div>
-                    <button className="btn btn-dark" onClick={handleSubmit} disabled={isNotFilled}>Войти</button>
+                    <button
+                        className="btn btn-dark"
+                        onClick={handleSubmit}
+                        disabled={!username.trim() || !password.trim()}
+                    >
+                        Войти
+                    </button>
                     <button className="btn btn-dark" onClick={clear}>Очистить</button>
                 </div>
             </form>
@@ -129,6 +137,8 @@ function Login() {
                     Аутентификация не пройдена. Попробуйте ещё раз.
                 </div>
             )}
+                </div>
+            </div>
         </div>
     )
 }

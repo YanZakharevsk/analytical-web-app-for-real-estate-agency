@@ -67,6 +67,12 @@ function History() {
     }
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>История</h2>
+                <p>Завершённые сделки.</p>
+            </section>
+            <div className="re-inner">
         <div className="history">
             <h4>История транзакций</h4>
             <hr></hr>
@@ -121,6 +127,8 @@ function History() {
                 </div>
             )}
 
+        </div>
+            </div>
         </div>
     );
 }

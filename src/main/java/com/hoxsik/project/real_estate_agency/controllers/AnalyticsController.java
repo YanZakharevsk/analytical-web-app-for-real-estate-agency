@@ -9,6 +9,7 @@ import com.hoxsik.project.real_estate_agency.jpa.entities.enums.Privilege;
 import com.hoxsik.project.real_estate_agency.security.RequiredPrivilege;
 import com.hoxsik.project.real_estate_agency.services.AnalyticsService;
 import com.hoxsik.project.real_estate_agency.services.AnalyticsTrackingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +31,7 @@ public class AnalyticsController {
     @PostMapping("/price-dynamics")
     public List<PriceDynamicsResponse> getPriceDynamics(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestBody PriceDynamicsRequest request
+            @Valid @RequestBody PriceDynamicsRequest request
     ) {
         List<PriceDynamicsResponse> result = analyticsService.getPriceDynamics(request);
         Map<String, Object> props = new HashMap<>();

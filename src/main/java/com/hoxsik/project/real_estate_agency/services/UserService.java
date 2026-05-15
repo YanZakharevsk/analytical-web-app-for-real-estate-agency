@@ -61,8 +61,11 @@ public class UserService {
 
         if(user.isEmpty())
             return new Response(false, HttpStatus.NOT_FOUND, "Аккаунта не найден по указанному имени");
-        if(!credentialsUpdateRequest.getUsername().isBlank() && isUsernameUnavailable(credentialsUpdateRequest.getUsername()))
+        String requestedUsername = credentialsUpdateRequest.getUsername();
+        if (requestedUsername != null && !requestedUsername.isBlank()
+                && isUsernameTakenBySomeoneElse(requestedUsername, user.get().getId())) {
             return new Response(false, HttpStatus.CONFLICT, "Имя уже занято");
+        }
 
         setUpdatedAttributes(user.get(), credentialsUpdateRequest);
 
@@ -127,6 +130,15 @@ public class UserService {
         Optional<User> optionalUser = userRepository.findByUsername(username);
 
         return optionalUser.isPresent();
+    }
+
+    /**
+     * {@code true}, если логин уже занят другим пользователем (не {@code excludeUserId}).
+     */
+    public boolean isUsernameTakenBySomeoneElse(String username, Long excludeUserId) {
+        return userRepository.findByUsername(username)
+                .filter(u -> !u.getId().equals(excludeUserId))
+                .isPresent();
     }
 
     /**

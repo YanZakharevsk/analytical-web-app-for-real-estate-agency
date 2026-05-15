@@ -12,6 +12,9 @@ import com.hoxsik.project.real_estate_agency.services.OfferService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +41,7 @@ public class OfferController {
 
     @RequiredPrivilege(Privilege.CHECK_OFFERS)
     @GetMapping("/auth/offers")
-    public ResponseEntity<List<OfferPreviewResponse>> filterEstates(
+    public ResponseEntity<Page<OfferPreviewResponse>> filterEstates(
             @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "bathrooms", required = false) Integer bathrooms,
             @RequestParam(value = "rooms", required = false) Integer rooms,
@@ -52,19 +55,13 @@ public class OfferController {
             @RequestParam(value = "priceFrom", required = false) Double priceFrom,
             @RequestParam(value = "priceTo", required = false) Double priceTo,
             @RequestParam(value = "postFrom", required = false) LocalDateTime postFrom,
-            @RequestParam(value = "postTo", required = false) LocalDateTime postTo
+            @RequestParam(value = "postTo", required = false) LocalDateTime postTo,
+            @PageableDefault(size = 12, sort = "id") Pageable pageable
     ) {
-        Optional<List<Offer>> optionalOffers = offerService.getFilteredOffers(
+        Page<OfferPreviewResponse> page = offerService.getFilteredOffersPage(
                 bathrooms, rooms, garage, storey, location, balcony, size,
-                condition, type, availability, priceFrom, priceTo, postFrom, postTo);
-
-        return optionalOffers
-                .map(estates -> ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(estates.stream().map(Mapper.INSTANCE::convertOfferPreview).toList()))
-                .orElseGet(() -> ResponseEntity
-                        .status(HttpStatus.NOT_FOUND)
-                        .build());
+                condition, type, availability, priceFrom, priceTo, postFrom, postTo, pageable);
+        return ResponseEntity.ok(page);
     }
 
     @RequiredPrivilege(Privilege.BLOCK_OFFER)

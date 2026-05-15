@@ -232,6 +232,13 @@ const OfferCard = () => {
     }
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Карточка объекта</h2>
+                <p>Подробности предложения</p>
+            </section>
+            <div className="re-inner">
+            <div className="re-surface">
         <div className="offer">
             {offer != null && (
                 <>
@@ -285,6 +292,9 @@ const OfferCard = () => {
                 </div>
                 </>
              )}   
+        </div>
+            </div>
+            </div>
         </div>
     );
 }

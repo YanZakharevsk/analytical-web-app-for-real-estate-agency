@@ -5,6 +5,7 @@ import { useAuth } from '../AuthContext.js';
 import star from './star.png';
 import starFilled from './star-filled.png';
 import { trackEvent } from '../../utils/analyticsTrack';
+import { readApiErrorMessage } from '../../utils/readApiError.js';
 
 function Review() {
     const { authenticatedUser } = useAuth();
@@ -15,6 +16,7 @@ function Review() {
     const [stars, setStars] = useState(Array(10).fill(false));
     const [isSuccess, setIsSuccess] = useState(false);
     const [isFailed, setIsFailed] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const onStarClick = (idx) => {
         const newStars = stars.map((_, index) =>
@@ -25,28 +27,35 @@ function Review() {
         setRating(idx + 1);
     };
     
-    useState(() => {
+    useEffect(() => {
         const fetchAgent = async () => {
             const response = await fetch(`/api/auth/agent?id=${agent}`, {
-                method: "GET",
+                method: 'GET',
             });
 
             if (!response.ok) {
-                console.log("Failed to fetch the agent");
+                console.log('Failed to fetch the agent');
                 return;
             }
 
             const data = await response.json();
-
             setAgentInfo(data);
+        };
+
+        if (agent) {
+            fetchAgent();
         }
-
-        fetchAgent();
-
-    }, []);
+    }, [agent]);
 
     const onSubmitClick = (e) => {
         e.preventDefault();
+        setErrorMessage('');
+        setIsFailed(false);
+        if (!authenticatedUser?.token) {
+            setIsFailed(true);
+            setErrorMessage('Войдите в систему, чтобы оставить отзыв.');
+            return;
+        }
         trackEvent({
             eventName: "review_submit",
             category: "INTERACTION",
@@ -64,33 +73,34 @@ function Review() {
             };
 
             const response = await fetch(`/api/review?id=${id}`, {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "Authorization": "Bearer " + authenticatedUser.token,
-                    "Content-Type": "application/json"
-                }, 
-                body: JSON.stringify(body)
+                    Authorization: 'Bearer ' + authenticatedUser.token,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
             });
 
             if (!response.ok) {
-                console.log("Failed to review the offer");
-
+                const msg = await readApiErrorMessage(response);
+                setErrorMessage(msg);
                 setIsSuccess(false);
                 setIsFailed(true);
                 trackEvent({
-                    eventName: "listing_validation_error",
-                    category: "SYSTEM",
+                    eventName: 'review_submit_failed',
+                    category: 'SYSTEM',
                     properties: {
-                        field_name: "review",
-                        error_type: "submit_failed"
-                    }
+                        field_name: 'review',
+                        error_type: 'submit_failed',
+                    },
                 }, authenticatedUser?.token);
 
                 return;
-            };
+            }
 
             setIsSuccess(true);
             setIsFailed(false);
+            setErrorMessage('');
             trackEvent({
                 eventName: "review_published",
                 category: "CONVERSION",
@@ -106,6 +116,13 @@ function Review() {
     }
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Отзыв об агенте</h2>
+                <p>Оцените сотрудничество и оставьте комментарий.</p>
+            </section>
+            <div className="re-inner re-inner--narrow">
+            <div className="re-surface">
         <div className="review">
             {agentInfo != null && (
                 <>
@@ -126,13 +143,16 @@ function Review() {
                         </div>
                     )}
                     {isFailed && (
-                        <div className='alert alert-danger'>
-                            Что-то пошло не так. Попробуйте ещё раз.
+                        <div className="alert alert-danger">
+                            {errorMessage || 'Что-то пошло не так. Попробуйте ещё раз.'}
                         </div>
                     )}
                     
                 </>
             )}
+        </div>
+            </div>
+            </div>
         </div>
     );
 }

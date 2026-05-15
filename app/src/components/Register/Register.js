@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './Register.css';
 import { trackEvent } from '../../utils/analyticsTrack';
+import { readApiErrorMessage } from '../../utils/readApiError.js';
 
 function Register() {
     const [firstName, setFirstName] = useState("");
@@ -14,6 +15,7 @@ function Register() {
     const [role, setRole] = useState("");
     const [registrationFailure, setRegistrationFailure] = useState(false);
     const [registrationSuccess, setRegistrationSuccess] = useState(false);
+    const [serverError, setServerError] = useState('');
 
     const isAnyFieldEmpty = () => {
         return !(
@@ -39,7 +41,8 @@ function Register() {
         setEmail("");
         setPhoneNumber("");
         setRole("");
-        setPasswordMatch(true); 
+        setPasswordMatch(true);
+        setServerError('');
     }
 
     const handlePhoneChange = (e) => {
@@ -78,6 +81,15 @@ function Register() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setServerError('');
+        setRegistrationFailure(false);
+
+        if (isAnyFieldEmpty()) {
+            setRegistrationFailure(true);
+            setServerError('Заполните все поля формы.');
+            return;
+        }
+
         trackEvent({
             eventName: "registration_submit",
             category: "INTERACTION",
@@ -90,6 +102,7 @@ function Register() {
 
         if (password !== repeatPassword) {
             setPasswordMatch(false);
+            setServerError('Пароли не совпадают.');
             trackEvent({
                 eventName: "registration_failed",
                 category: "SYSTEM",
@@ -122,7 +135,9 @@ function Register() {
             });
 
             if (!response.ok) {
-                console.log("Failed to register");
+                console.log('Failed to register');
+                const msg = await readApiErrorMessage(response);
+                setServerError(msg);
                 setRegistrationFailure(true);
                 trackEvent({
                     eventName: "registration_failed",
@@ -136,12 +151,13 @@ function Register() {
             }
 
             setRegistrationSuccess(true);
+            setRegistrationFailure(false);
+            setServerError('');
             trackEvent({
                 eventName: "registration_completed",
                 category: "CONVERSION",
                 properties: {
                     user_role: role || "unknown",
-                    user_password: "[redacted]",
                     auth_type: "email"
                 }
             });
@@ -153,9 +169,13 @@ function Register() {
     }
 
     return (
-        <div className='registration'>
-            <h2 className='lead'>Зарегистрируйтесь для полного доступа</h2>
-            <hr></hr>
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Регистрация</h2>
+                <p>Создайте учётную запись, чтобы пользоваться всеми возможностями сервиса.</p>
+            </section>
+            <div className="re-inner re-inner--narrow">
+                <div className="re-surface registration">
             <form>
                 <label htmlFor='fName'>Имя</label>
                 <input type='text' id='fName' name='fName' value={firstName} onChange={(e) => setFirstName(e.target.value)}></input>
@@ -168,8 +188,13 @@ function Register() {
                 <label htmlFor='rPassword'>Повторите пароль</label>
                 <input type='password' id='rPassword' name='rPassword' value={repeatPassword} onChange={(e) => setRepeatPassword(e.target.value)}></input>
                 {!passwordMatch && (
-                    <div class="alert alert-danger" role="alert">
-                        <p>You successfully signed in.</p>
+                    <div className="alert alert-danger" role="alert">
+                        <p>Пароли не совпадают.</p>
+                    </div>
+                )}
+                {serverError && (
+                    <div className="alert alert-danger" role="alert">
+                        <p>{serverError}</p>
                     </div>
                 )}
                 <label htmlFor='email'>Email</label>
@@ -209,6 +234,8 @@ function Register() {
                 )}
             </form>
 
+                </div>
+            </div>
         </div>
     );
 }

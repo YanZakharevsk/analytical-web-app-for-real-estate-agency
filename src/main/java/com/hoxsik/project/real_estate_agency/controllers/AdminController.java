@@ -1,5 +1,6 @@
 package com.hoxsik.project.real_estate_agency.controllers;
 
+import com.hoxsik.project.real_estate_agency.dto.request.AdminUserUpdateRequest;
 import com.hoxsik.project.real_estate_agency.dto.request.UpdateUserRoleRequest;
 import com.hoxsik.project.real_estate_agency.dto.request.UserRequest;
 import com.hoxsik.project.real_estate_agency.dto.response.Response;
@@ -37,8 +38,14 @@ public class AdminController {
 
     @RequiredPrivilege(Privilege.UPDATE_USER_ROLE)
     @PostMapping("/admin/users/{id}/role")
-    public ResponseEntity<UserResponse> updateUserRole(@PathVariable Long id, @RequestBody UpdateUserRoleRequest request) {
+    public ResponseEntity<UserResponse> updateUserRole(@PathVariable Long id, @Valid @RequestBody UpdateUserRoleRequest request) {
         return ResponseEntity.ok(adminService.updateUserRole(id, request));
+    }
+
+    @RequiredPrivilege(Privilege.UPDATE_USER_ROLE)
+    @PatchMapping("/admin/users/{id}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody AdminUserUpdateRequest request) {
+        return ResponseEntity.ok(adminService.updateUser(id, request));
     }
 
     @RequiredPrivilege(Privilege.REMOVE_USER)

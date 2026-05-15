@@ -3,6 +3,7 @@ import { useAuth } from '../AuthContext';
 import './EstimatePage.css';
 import image from './images (1).jpg';
 import { trackEvent } from '../../utils/analyticsTrack';
+import { readApiErrorMessage } from '../../utils/readApiError.js';
 
 
 const estateTypes = [
@@ -42,7 +43,10 @@ function EstimatePage() {
 
     const nextDisabled =
         (step === 1 && (!form.estateType || !form.availability)) ||
-        (step === 2 && (!form.area || !form.rooms || (!form.floor && !form.totalFloors))) ||
+        (step === 2 &&
+            (!form.area ||
+                !form.rooms ||
+                (form.estateType === 'APARTMENT' ? !form.floor : !form.totalFloors))) ||
         (step === 3 && !form.condition);
 
     // --- Функция для отправки данных на бэк ---
@@ -87,7 +91,9 @@ function EstimatePage() {
             });
 
             if (!response.ok) {
-                throw new Error('Ошибка при расчёте. Попробуйте снова.');
+                const msg = await readApiErrorMessage(response);
+                setError(msg);
+                return;
             }
 
             const data = await response.json();
@@ -113,6 +119,7 @@ function EstimatePage() {
 
 
     return (
+        <div className="re-page re-page--transparent">
         <div className="estimate-page">
             <section className="estimate-hero">
                 <div className="estimate-left">
@@ -289,6 +296,7 @@ function EstimatePage() {
                 </details>
             </section>
 
+        </div>
         </div>
     );
 }

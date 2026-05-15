@@ -33,7 +33,14 @@ public class AuthenticationController {
         DatabaseUserDetails databaseUserDetails = databaseUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 
         if (Objects.nonNull(databaseUserDetails)) {
-            return ResponseEntity.status(HttpStatus.OK).body(new AuthenticationResponse(authenticationRequest.getUsername(), jwtUtils.generateToken(authenticationRequest.getUsername())));
+            String role = databaseUserDetails.getUser().getRole().name();
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new AuthenticationResponse(
+                            authenticationRequest.getUsername(),
+                            jwtUtils.generateToken(authenticationRequest.getUsername()),
+                            role
+                    )
+            );
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

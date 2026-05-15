@@ -93,6 +93,9 @@ function Offer() {
     }
 
     return (
+        <div className="re-page">
+            <div className="re-inner">
+            <div className="re-surface">
         <div className="offer">
             {offer != null && (
                 <>
@@ -101,6 +104,9 @@ function Offer() {
                 <OfferCard id={id}></OfferCard>
                 </>
             )}
+        </div>
+            </div>
+            </div>
         </div>
     );
 }

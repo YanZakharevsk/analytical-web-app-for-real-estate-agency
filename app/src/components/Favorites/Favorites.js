@@ -51,6 +51,12 @@ function Favorites() {
     }
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Избранное</h2>
+                <p>Сохранённые объявления.</p>
+            </section>
+            <div className="re-inner">
         <div className='favorites'>
             <h4>Избранные</h4>
             <hr></hr>
@@ -73,6 +79,8 @@ function Favorites() {
                 ) : (
                     <p>В избранное пока не добавлено ни одного предложения.</p>
                 )}
+            </div>
+        </div>
             </div>
         </div>
     );

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/estimate")
 @RequiredArgsConstructor
@@ -22,8 +24,8 @@ public class EstimateController {
     @RequiredPrivilege(Privilege.CHECK_ANALYTICS)
     @PostMapping
     public EstimateResponseDto estimate(
-            @AuthenticationPrincipal UserDetails userDetails, // Получаем залогиненого пользователя
-            @RequestBody EstimateRequestDto dto
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody EstimateRequestDto dto
     ) {
         if (userDetails == null) {
             throw new RuntimeException("Пользователь не авторизован");

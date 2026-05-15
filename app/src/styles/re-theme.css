@@ -1,0 +1,276 @@
+/* Общая тема Real Estate: градиенты, карточки, формы — для всех страниц */
+
+:root {
+  --re-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --re-text: #1e293b;
+  --re-muted: #64748b;
+  --re-border: #e2e8f0;
+  --re-surface: #ffffff;
+  --re-surface-soft: #f8fafc;
+  --re-radius: 12px;
+  --re-radius-lg: 16px;
+  --re-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --re-accent: #667eea;
+}
+
+.re-page {
+  min-height: calc(100vh - 120px);
+  background: var(--re-surface-soft);
+  color: var(--re-text);
+}
+
+.re-page--transparent {
+  background: transparent;
+}
+
+.re-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+}
+
+.re-inner--narrow {
+  max-width: 640px;
+}
+
+.re-hero {
+  width: 100%;
+  text-align: center;
+  padding: 40px 20px 36px;
+  background: var(--re-gradient);
+  color: #fff;
+}
+
+.re-hero h1,
+.re-hero h2 {
+  margin: 0 0 10px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.re-hero p {
+  margin: 0;
+  opacity: 0.95;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.re-surface {
+  background: var(--re-surface);
+  border: 1px solid var(--re-border);
+  border-radius: var(--re-radius-lg);
+  box-shadow: var(--re-shadow);
+  padding: 28px 26px 32px;
+}
+
+.re-surface + .re-surface {
+  margin-top: 22px;
+}
+
+.re-section-title {
+  margin: 0 0 8px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--re-text);
+}
+
+.re-muted {
+  color: var(--re-muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.re-form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.re-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.re-field label,
+.re-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.re-field input,
+.re-field select,
+.re-field textarea,
+.re-input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--re-border);
+  font-size: 1rem;
+  background: #fff;
+}
+
+.re-field input:focus,
+.re-field select:focus,
+.re-input:focus {
+  outline: none;
+  border-color: var(--re-accent);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.22);
+}
+
+.re-btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.re-btn-primary {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: none;
+  background: var(--re-gradient);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.re-btn-primary:hover:not(:disabled) {
+  opacity: 0.95;
+  transform: translateY(-1px);
+}
+
+.re-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.re-btn-secondary {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--re-border);
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  color: #334155;
+}
+
+.re-btn-secondary:hover {
+  border-color: #c7d2fe;
+}
+
+.re-alert {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.re-alert-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+}
+
+.re-alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+
+.re-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--re-radius-lg);
+  border: 1px solid var(--re-border);
+  background: var(--re-surface);
+  box-shadow: var(--re-shadow);
+}
+
+.re-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.re-table th,
+.re-table td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--re-border);
+}
+
+.re-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #334155;
+}
+
+.re-table tr:last-child td {
+  border-bottom: none;
+}
+
+.re-table tr:hover td {
+  background: #fafbff;
+}
+
+.re-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #dcfce7;
+  color: #166534;
+}
+
+.re-lead {
+  text-align: center;
+  margin: 0 0 12px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--re-text);
+}
+
+hr.re-hr {
+  border: none;
+  border-top: 1px solid var(--re-border);
+  margin: 20px 0;
+}
+
+/* Совместимость с существующими классами */
+.re-page .lead {
+  color: var(--re-text);
+}
+
+.re-page .btn.btn-dark {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  background: var(--re-gradient);
+  color: #fff;
+  font-weight: 600;
+}
+
+.re-page .btn.btn-dark:disabled {
+  opacity: 0.45;
+}
+
+.re-page .alert.alert-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.re-page .alert.alert-danger {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: 10px;
+  padding: 12px 14px;
+}

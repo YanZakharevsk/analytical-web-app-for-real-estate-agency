@@ -97,6 +97,12 @@ function Agents() {
     }
 
     return (
+        <div className="re-page">
+            <section className="re-hero">
+                <h2>Агенты</h2>
+                <p>Команда экспертов Real Estate.</p>
+            </section>
+            <div className="re-inner">
         <div className="agents">
             <h2 className="lead">Наша превосходная команда экспертов</h2>
             <p>Выберите из числа квалифицированных и опытных агентов по недвижимости.
@@ -157,6 +163,8 @@ function Agents() {
 
                 </div>
             ))}
+        </div>
+            </div>
         </div>
     );
 }

@@ -14,12 +14,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class PhotoService {
+    private static final Set<String> ALLOWED_CONTENT_TYPES = Set.of("image/png", "image/jpeg", "image/jpg");
+
     private final PhotoRepository photoRepository;
     private final EstateService estateService;
     private final ZipperService zipperService;
@@ -37,7 +41,7 @@ public class PhotoService {
         Optional<Photo> photo = createPhoto(file, estate.get());
 
         if (photo.isEmpty())
-            return new Response(false, HttpStatus.BAD_REQUEST, "Failed to upload the file");
+            return new Response(false, HttpStatus.BAD_REQUEST, "Допустимы только изображения в формате PNG или JPEG");
 
         photoRepository.save(photo.get());
 
@@ -60,6 +64,15 @@ public class PhotoService {
     }
 
     private Optional<Photo> createPhoto(MultipartFile file, Estate estate) {
+        String contentType = Optional.ofNullable(file.getContentType())
+                .map(s -> s.toLowerCase(Locale.ROOT))
+                .orElse("");
+        String original = Optional.ofNullable(file.getOriginalFilename()).orElse("").toLowerCase(Locale.ROOT);
+        boolean mimeOk = ALLOWED_CONTENT_TYPES.contains(contentType);
+        boolean extOk = original.endsWith(".png") || original.endsWith(".jpg") || original.endsWith(".jpeg");
+        if (!mimeOk && !extOk) {
+            return Optional.empty();
+        }
 
         File directory = new File(path + estate.getId());
 
