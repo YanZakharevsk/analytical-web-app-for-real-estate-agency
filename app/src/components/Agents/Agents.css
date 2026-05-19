@@ -1,90 +1,273 @@
+/* Agents.css */
+
 .agents {
-    margin-left: 40px;
-    margin-right: 40px;
-    margin-top: 40px;
+    width: 100%;
     display: grid;
-    gap: 10px;
+    gap: 35px;
+    animation: fadeIn 0.5s ease-out forwards;
 }
 
+/* Intro */
 .agents h2 {
     text-align: center;
     text-transform: uppercase;
-    font-size: 27px;
+    font-size: 2.3rem;
     letter-spacing: 2px;
+    color: #2d3748;
+    margin: 0;
 }
 
 .agents p {
-    line-height: 2;
+    line-height: 1.8;
+    color: #4a5568;
+    font-size: 1rem;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.agents .review {
+/* Divider */
+.agents hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    opacity: 0.15;
+    margin: 10px 0;
+}
+
+/* Agent Card */
+.agents .card {
+    background: white;
+    padding: 40px;
+    border-radius: 28px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.1);
+    border-top: 6px solid #667eea;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.agents .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            135deg,
+            rgba(102, 126, 234, 0.04) 0%,
+            rgba(118, 75, 162, 0.04) 100%
+    );
+    z-index: 0;
+}
+
+.agents .card > * {
+    position: relative;
+    z-index: 1;
+}
+
+.agents .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 60px rgba(102, 126, 234, 0.18);
+}
+
+/* Agent Name */
+.agents .card h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.agents .card h6 {
+    font-size: 1rem;
+    color: #667eea;
+    margin: 6px 0;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Actions */
+.agents .actions {
+    margin: 35px 0;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.agents .actions div {
+    background: rgba(248, 249, 250, 0.8);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
     align-items: center;
-}
-
-.agents .review h5 {
-    font-size: 18px;
-    text-align: left;
-}
-
-.agents .review h6 {
-    font-size: 15px;
-    text-align: left;
-}
-
-.agents .actions {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    display: grid;
-    grid-template-columns: auto auto;
-    gap: 100px;
     justify-content: center;
+    gap: 14px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
-.agents .actions {
-    font-weight: 510;
+.agents .actions div:hover {
+    transform: translateY(-5px);
+    border-color: rgba(102, 126, 234, 0.15);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
 }
 
 .agents .actions img {
-    margin-right: 10px;
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
 }
 
-.agents a:link, .agents a:visited {
-    color: rgb(115, 115, 115);
+.agents a:link,
+.agents a:visited {
+    color: #2d3748;
     text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    transition: color 0.25s ease;
 }
 
-.agents a:hover, .agents a:active  {
-    color: black;
+.agents a:hover,
+.agents a:active {
+    color: #667eea;
     cursor: pointer;
 }
 
+/* Calendar Slots */
 .agents .available-slots {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 30px 0;
     display: grid;
-    grid-template-columns: repeat(4, auto);
-    justify-content: center;
-    column-gap: 80px;
-    row-gap: 20px;
-}
-
-.agents .available-slots button {
-    padding: 0;
-    color: white;
-    background-color: rgba(39, 39, 39, 0.771);
-}
-
-.agents .available-slots button:focus, .agents .available-slots button:hover {
-    padding: 0;
-    color: white;
-    background-color: rgb(47, 47, 47);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
 }
 
 .agents .available-slots .slot {
+    background: white;
+    border-radius: 22px;
+    padding: 22px;
     display: grid;
-    grid-template-columns: auto;
+    gap: 15px;
+    justify-items: center;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    border-left: 5px solid #667eea;
+    transition: all 0.3s ease;
+}
+
+.agents .available-slots .slot:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(102, 126, 234, 0.15);
+}
+
+.agents .available-slots button {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 22px;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.agents .available-slots button:hover,
+.agents .available-slots button:focus {
+    transform: scale(1.04);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.25);
+}
+
+/* Empty Calendar */
+.agents .empty-slots {
+    margin-top: 25px;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(248, 249, 250, 0.9);
+    text-align: center;
+    color: #718096;
+    font-weight: 600;
+}
+
+/* Reviews */
+.agents .review {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 25px;
+    align-items: center;
+    background: rgba(248, 249, 250, 0.7);
+    padding: 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.agents .review:hover {
+    background: rgba(248, 249, 250, 1);
+    transform: translateX(5px);
+}
+
+.agents .review div:first-child {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+}
+
+.agents .review img {
+    width: 32px;
+    height: 32px;
+}
+
+.agents .review h5 {
+    font-size: 1.05rem;
+    text-align: left;
+    color: #2d3748;
+    margin-bottom: 8px;
+}
+
+.agents .review h6 {
+    font-size: 0.95rem;
+    text-align: left;
+    color: #718096;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .agents .review {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .agents .review h5,
+    .agents .review h6 {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .agents h2 {
+        font-size: 1.8rem;
+    }
+
+    .agents .card {
+        padding: 25px;
+    }
+
+    .agents .actions {
+        grid-template-columns: 1fr;
+    }
+
+    .agents .available-slots {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -1,66 +1,151 @@
 .login {
+    width: 100%;
     display: grid;
+    gap: 25px;
     justify-content: center;
-    margin-top: 40px;
-    font-size: 17px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out forwards;
 }
 
 .login h3 {
     grid-column: 1 / -1;
     text-align: center;
     text-transform: uppercase;
-    font-size: 28px;
+    font-size: 2.2rem;
     letter-spacing: 2px;
+    color: #2d3748;
+    margin: 0;
 }
 
 .login hr {
     grid-column: 1 / -1;
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    opacity: 0.15;
+    width: 100%;
 }
 
-form {
-    align-content: flex-start;
+/* FORM */
+.login form {
     display: grid;
-    grid-template-columns: auto auto;
+    gap: 18px;
+    padding: 35px;
+    background: white;
+    border-radius: 28px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.1);
+    min-width: 360px;
+}
+
+.login label {
+    text-align: left;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.95rem;
+}
+
+.login input[type="text"],
+.login input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    outline: none;
+    font-size: 1rem;
+    transition: all 0.25s ease;
+}
+
+.login input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* BUTTONS */
+.login .btn-group {
+    display: flex;
+    gap: 12px;
     justify-content: center;
-    gap: 30px;
-    padding: 30px;
+    margin-top: 10px;
 }
 
-/* ------------------ */
-/* КРАСИВЫЕ ALERT'Ы */
-/* ------------------ */
-
-.login .alert {
-    justify-self: center;
-    width: 300px;
-
+.login .btn {
     padding: 12px 18px;
-    border-radius: 12px;
-
-    font-size: 15px;
-    font-weight: 500;
-    text-align: center;
-
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 0.25s ease-out;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
 }
 
-/* Ошибка (красный) */
+.login .btn-dark {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.login .btn-dark:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.25);
+}
+
+.login .btn-dark:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ALERTS */
+.login .alert {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    animation: fadeIn 0.25s ease-out;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
 .login .alert-danger {
-    background-color: #ffe5e5;   /* нежно-красный */
+    background: #ffe5e5;
     border: 1px solid #ffb3b3;
     color: #a70000;
 }
 
-/* Успех (зелёный) */
 .login .alert-success {
-    background-color: #e6ffe8;   /* нежно-зелёный */
+    background: #e6ffe8;
     border: 1px solid #a8f2b1;
     color: #0b7a27;
 }
 
-/* Анимация */
+.login a {
+    color: #667eea;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .login form {
+        min-width: 280px;
+        padding: 25px;
+    }
+
+    .login h3 {
+        font-size: 1.8rem;
+    }
 }

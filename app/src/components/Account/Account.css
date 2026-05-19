@@ -1,82 +1,250 @@
+/* Account.css */
+
 .account {
+    width: 100%;
     display: grid;
-    gap: 20px;
-    margin-left: 40px;
-    margin-right: 40px;
+    gap: 40px;
 }
 
-
+/* Header Text */
 .account h2 {
-    margin-top: 40px;
+    margin-top: 0;
     text-transform: uppercase;
     letter-spacing: 2px;
-    font-size: 27px;
+    font-size: 2.2rem;
     text-align: center;
+    color: #2d3748;
 }
 
 .account p {
-    line-height: 2;
+    line-height: 1.7;
+    color: #4a5568;
 }
 
+/* Actions Grid */
 .account .actions {
-    justify-self: center;
-    margin-top: 50px;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, auto);
-    gap: 50px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 30px;
+    margin-top: 10px;
 }
 
 .account .actions .action {
+    background: white;
+    border-radius: 25px;
+    padding: 30px 20px;
     display: grid;
-    justify-content: center;
+    justify-items: center;
+    align-items: center;
     text-align: center;
-    gap: 20px;
+    gap: 18px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.1);
+    border-top: 6px solid #667eea;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.account .actions a:link, .account .actions a:visited {
-    color: rgb(105, 105, 105);
-    text-decoration: none;
-    font-weight: 520;
-    text-transform: uppercase;
+.account .actions .action::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+            135deg,
+            rgba(102, 126, 234, 0.04) 0%,
+            rgba(118, 75, 162, 0.04) 100%
+    );
+    z-index: 0;
 }
 
-.account .actions a:hover, .account .actions a:focus {
-    color: rgb(0, 0, 0);
-}
-
-.account hr, .account .meetings {
-    grid-column: 1 / -1;
+.account .actions .action:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 25px 60px rgba(102, 126, 234, 0.2);
 }
 
 .account .actions .action img {
-    margin-left: 3px;
     width: 75px;
     height: 75px;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
 
+.account .actions .action:hover img {
+    transform: scale(1.08);
+}
+
+.account .actions a:link,
+.account .actions a:visited {
+    color: #2d3748;
+    text-decoration: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.95rem;
+    position: relative;
+    z-index: 1;
+    transition: color 0.25s ease;
+}
+
+.account .actions a:hover,
+.account .actions a:focus {
+    color: #667eea;
+}
+
+/* Divider */
+.account hr,
 .account .meetings {
-    margin-left: 50px;
-    margin-right: 50px;
+    grid-column: 1 / -1;
+}
+
+.account hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    opacity: 0.15;
+    margin: 10px 0;
+}
+
+/* Meetings Section */
+.account .meetings {
+    margin-top: 30px;
     display: grid;
-    gap: 100px;
-    justify-content: center;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 120px 1fr;
+    gap: 30px;
+    align-items: start;
 }
 
 .account .meetings img {
-    margin-top: 50px;
-    width: 80px;
-    height: 80px;
-    grid-column: 1;
-    grid-row: 1 / -1;
+    width: 90px;
+    height: 90px;
+    margin-top: 10px;
+    animation: float 6s ease-in-out infinite;
 }
 
+/* Meeting Cards */
 .meetings .meeting-card {
     display: grid;
-    grid-template-columns: auto auto;
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.meetings .meeting-card .card {
+    background: white;
+    padding: 25px;
+    border-radius: 22px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid #667eea;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.meetings .meeting-card .card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+}
+
+.meetings .meeting-card .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(102, 126, 234, 0.18);
 }
 
 .meetings .meeting-card h5 {
-    font-weight: 510;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 10px;
+}
+
+.meetings .meeting-card h6 {
+    font-size: 0.95rem;
+    color: #667eea;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.meetings .meeting-card p {
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+.meetings .meeting-card hr {
+    margin: 10px 0 15px;
+}
+
+/* Empty Meetings */
+.account .empty-meetings {
+    background: white;
+    padding: 35px;
+    border-radius: 22px;
+    text-align: center;
+    color: #718096;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.08);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .account .meetings {
+        grid-template-columns: 1fr;
+    }
+
+    .account .meetings img {
+        justify-self: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .account .actions {
+        grid-template-columns: 1fr;
+    }
+
+    .account h2 {
+        font-size: 1.8rem;
+    }
+
+    .meetings .meeting-card {
+        grid-template-columns: 1fr;
+    }
+
+    .account .actions .action {
+        padding: 25px 20px;
+    }
+}
+
+/* Animations */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+.account {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

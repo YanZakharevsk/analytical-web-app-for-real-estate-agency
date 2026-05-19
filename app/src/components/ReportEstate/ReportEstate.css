@@ -2,114 +2,124 @@
     margin-top: 20px;
     margin-left: 40px;
     margin-right: 40px;
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: center;
-    column-gap: 50px;
     margin-bottom: 100px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+    gap: 40px;
 }
 
-.report-estate h2 {
-    grid-column: 1 / -1;
-    text-transform: uppercase;
-    font-size: 30px;
-    text-align: center;
-}
-
-.report-estate h6 {
-    grid-column: 1 / -1;
-    text-align: center;
-    text-transform: uppercase;
-}
-
+/* заголовки */
+.report-estate h2,
+.report-estate h6,
 .report-estate hr {
     grid-column: 1 / -1;
+    text-align: center;
 }
 
-.report-estate ul {
-    list-style: none;
+/* формы не ломаем */
+.report-estate form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.report-estate input[type='checkbox'] {
-    justify-self: self-start;
-    width: 20px;
-    height: 20px;
-    border: 1px solid rgb(185, 185, 185);
-    border-radius: 4px;
-    background-color: #fff;
-    cursor: pointer;
-    outline: none;
-    vertical-align: middle;
+/* label */
+.report-estate label,
+.report-estate p {
+    font-size: 14px;
+    margin-top: 6px;
 }
 
-.custom-checkbox:checked {
-    background-color: #333;
+/* input общий стиль */
+.report-estate input[type='text'],
+.report-estate input[type='number'] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
 }
 
+/* radio группы — НИЧЕГО не разваливаем */
+.report-estate .type,
+.report-estate .availability,
+.report-estate .condition {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* radio чек */
 .report-estate input[type='radio'] {
     cursor: pointer;
+    margin-right: 6px;
 }
 
-.report-estate form div:last-child {
-    display: block;
+/* checkbox */
+.report-estate input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    margin-right: 6px;
 }
 
-.report-estate .submit-btn {
-    margin-top: 20px;
-}
-
-.report-estate .btn:last-child {
-    grid-column: 2;
-}
-
+/* files блок НЕ трогаем структуру */
 .report-estate .files {
     grid-column: 1 / -1;
-    justify-content: center;
-    grid-template-columns: auto auto;
-    display: grid;
-    gap: 20px;
-    align-items: center;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.report-estate .files p {
-    grid-column: 1;
-}
-
+/* кнопки выбора файлов */
 .report-estate .files label {
-    grid-column: -1;
-}
-
-
-.report-estate .files label {
-    border: 1px solid rgb(218, 218, 218);
-    text-align: center;
-    border-radius: 10px;
-    padding: 5px;
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .report-estate .files label:hover {
-    border: 1px solid rgb(113, 113, 113);
-    cursor: pointer;
+    border-color: #777;
 }
 
+/* скрытый input */
 .report-estate .file {
     opacity: 0;
-    width: 0.1px;
-    height: 0.1px;
     position: absolute;
 }
 
-.report-estate .files .added-file {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: left;
+/* выбранные файлы */
+.report-estate .added-file {
+    display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.report-estate .files .added-file button {
-    width: 30px;
+/* submit */
+.report-estate .submit-btn {
+    margin-top: 20px;
+}
+
+/* левая + правая колонка */
+.report-estate form:nth-child(1) {
+    grid-column: 1;
+}
+
+.report-estate form:nth-child(2) {
+    grid-column: 2;
+}
+
+.report-success {
+    grid-column: 1 / -1;
+    padding: 12px;
+    border-radius: 10px;
+    background: #e9f9ee;
+    border: 1px solid #2ecc71;
+    color: #1e7e34;
     text-align: center;
-    height: 30px;
-    padding: 0px;
+    font-weight: 500;
 }

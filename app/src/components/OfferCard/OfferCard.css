@@ -1,97 +1,111 @@
 .offer {
+    margin: 0;
     display: grid;
-    grid-template-columns: auto 1fr;
-    margin: 40px 40px;
-    column-gap: 100px;
+    grid-template-columns: 1fr;
+    gap: 30px;
 }
 
-.offer h2, .offer hr {
+/* убираем старую жёсткую сетку */
+.offer h2,
+.offer hr {
     grid-column: 1 / -1;
 }
 
+/* СДЕЛАЛ КАК В re-surface: карточка внутри */
 .offer .info {
-  
-    justify-content: left;
-}
-
-.offer .info .desc {
     display: grid;
-    grid-template-columns: auto 1fr;
     gap: 20px;
-    align-items: center;
 }
 
-.offer .info .desc img {
-    width: 35px;
+/* TOP BAR — как на остальных страницах */
+.offer .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 30px;
 }
 
-.offer .info .desc p {
-    margin: 0;
-    padding: 0;
-}
-
-.offer .info h3 {
-    text-transform: uppercase;
-    font-weight: 510;
-}
-
-.offer .info .desc span {
-    font-weight: 520;
-}
-
+/* HEADER ТЕГИ */
 .offer .info .header {
-    display:  grid;
-    grid-template-columns: repeat(3, auto);
-    justify-content: left;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .offer .info .header p {
-    margin-right: 7px;
-    font-weight: 520;
+    margin: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #555;
+}
+
+/* FAVORITE БЛОК (оставил твой стиль, но чуть выровнял) */
+.offer .favorite {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 6px 10px;
+    background: #fff;
+}
+
+.offer .favorite h5 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 13px;
     text-transform: uppercase;
 }
 
-.offer button {
-    border: solid 1px black;
-    margin-top: 30px;
-}
-
-.offer button:hover {
-    background-color: rgb(68, 68, 68);
-    color: white;
-}
-
-.offer .info h6 {
-    margin-top: 50px;
-}
-
-.offer .top-bar {
-    display:  grid;
-    grid-template-columns: 1fr auto;
-    gap: 70px;
-    justify-content: space-between;
-    align-items: center;
-}
-
+/* HEART */
 .offer .heart:hover {
     cursor: pointer;
 }
 
-.offer .favorite {
+/* DESCRIPTION GRID -> упрощаем под общий стиль */
+.offer .info .desc {
     display: grid;
-    grid-template-columns: auto auto;
-    justify-content: center;
-    gap: 5px;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
     align-items: center;
-    align-content: center;
-    border: 1px solid black;
-    border-radius: 10px;
-    padding: 7px;
 }
 
-.offer .favorite h5 {
-    margin-top: 5px;
-    font-weight: 510;
-    font-size: 14px;
+/* ICONS */
+.offer .info .desc img {
+    width: 28px;
+}
+
+/* TEXT */
+.offer .info .desc p {
+    margin: 0;
+}
+
+/* TITLE */
+.offer .info h3 {
     text-transform: uppercase;
+    font-weight: 600;
+}
+
+/* BUTTONS — делаем как на остальных страницах */
+.offer button {
+    border: none;
+    background: #333;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.offer button:hover {
+    background: #555;
+}
+
+/* BLOCK MESSAGE */
+.offer .info h6 {
+    margin-top: 20px;
+    font-weight: 500;
+    color: #666;
 }

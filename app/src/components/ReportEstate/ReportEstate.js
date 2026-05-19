@@ -26,6 +26,7 @@ function ReportEstate() {
     const [isPhotoAdded, setIsPhotoAdded] = useState(false);
     const [isDocumentAdded, setIsDocumentAdded] = useState(false);
     const [submitError, setSubmitError] = useState('');
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         const fetchAgents = async () => {
@@ -65,8 +66,9 @@ function ReportEstate() {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
         setSubmitError('');
+        setSuccess(false);
+        e.preventDefault();
         trackEvent({
             eventName: "add_listing_submit",
             category: "INTERACTION",
@@ -127,6 +129,7 @@ function ReportEstate() {
             }
 
             const data = await response.json();
+            setSuccess(true);
             trackEvent({
                 eventName: "listing_request_submitted",
                 category: "CONVERSION",
@@ -344,6 +347,11 @@ function ReportEstate() {
             {submitError && (
                 <div className="alert alert-danger" role="alert" style={{ marginBottom: '12px' }}>
                     {submitError}
+                </div>
+            )}
+            {success && (
+                <div className="alert alert-success" role="alert" style={{ marginBottom: '12px' }}>
+                    Объект недвижимости успешно добавлен!
                 </div>
             )}
             <button className="btn btn-dark submit-btn" disabled={!isFormFilled()} onClick={handleSubmit}>Подтвердить</button>

@@ -1,29 +1,121 @@
+/* AccountSideBar.css */
+
 .sidebar {
     margin-top: 20px;
-    padding: 10px;
-    min-width: 150px;
-    height: 800px;
-    box-shadow: 10px -5px 20px rgba(0, 0, 0, 0.1);
-    background-color: white;
-    font-weight: 520;
+    min-width: 260px;
+    height: fit-content;
+    padding: 25px 20px;
+    background: white;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.1);
+    position: sticky;
+    top: 20px;
+    overflow: hidden;
+    border-top: 6px solid #667eea;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.sidebar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            135deg,
+            rgba(102, 126, 234, 0.04) 0%,
+            rgba(118, 75, 162, 0.04) 100%
+    );
+    pointer-events: none;
 }
 
 .sidebar ul {
-    border-radius: 10px;
+    position: relative;
+    z-index: 1;
     list-style: none;
     display: grid;
-    gap: 20px;
-    background-color: rgb(255, 255, 255);
-    font-size: 20px;
-    padding: 10px;
+    gap: 14px;
+    padding: 0;
+    margin: 0;
 }
 
-.sidebar a:link, .sidebar a:focus, .sidebar a:active, .sidebar a:visited {
-    padding: 10px;
+.sidebar li {
+    width: 100%;
+}
+
+.sidebar a:link,
+.sidebar a:visited,
+.sidebar a:focus,
+.sidebar a:active {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 16px 18px;
+    border-radius: 16px;
     text-decoration: none;
-    color: rgb(165, 165, 165);
+    color: #4a5568;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    transition: all 0.3s ease;
+    background: rgba(248, 249, 250, 0.8);
+    box-sizing: border-box;
 }
 
 .sidebar a:hover {
-    color: rgb(0, 0, 0);
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: translateX(6px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.25);
+}
+
+/* Optional active state */
+.sidebar a.active {
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 100%;
+        min-width: unset;
+        position: relative;
+        top: 0;
+    }
+
+    .sidebar ul {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        padding: 20px 15px;
+        border-radius: 20px;
+    }
+
+    .sidebar ul {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar a:link,
+    .sidebar a:visited,
+    .sidebar a:focus,
+    .sidebar a:active {
+        padding: 14px 16px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

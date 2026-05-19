@@ -1,108 +1,233 @@
 .reported-offers {
-    margin: 40px 40px;
-}  
-
-.reported-offers .offers {
-    margin-top: 50px;
+    width: 100%;
     display: grid;
-    gap:  50px;
+    gap: 30px;
 }
 
-.reported-offers .estate {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 50px;
-}
+/* ===== TITLE BLOCK ===== */
 
-.reported-offers .estate .info {
-    grid-column: 2;
-    display: grid;
-    justify-content: start;
-    gap: 10px;
-}
-
-.reported-offers .estate h4 {
-    font-weight: 550;
-}
-
-.reported-offers .estate .manage {
-    display: grid;
-    grid-template-columns: auto auto;
-    justify-content: start;
-    gap: 20px;
-    grid-column: 2;
-}
-
-.reported-offers .estate .info .header {
-    display:  grid;
-    grid-template-columns: repeat(3, auto);
-}
-
-.reported-offers .estate .info .header p {
-    margin-right: 7px;
-    font-weight: 530;
-    text-transform: uppercase;
-}
-
-
-.reported-offers .estate .info .parameters {
-    font-size: 17px;
-    display: grid;
-    grid-template-columns: auto auto auto;
-    column-gap: 30px;
-}
-
-.reported-offers .estate .info span {
-    font-weight: 550;
-}
-
-
-.reported-offers .desc {
-    margin-top: 20px;
-}
-
-.reported-offers .confirm {
-    background-color: rgb(46, 46, 46);
-    color: white;
-}
-
-.reported-offers .confirm:focus, .reported-offers .confirm:hover {
-    background-color: rgb(107, 107, 107);
-    color: white;
-}
-
-.reported-offers .reject {
-    border: solid 1px rgb(46, 46, 46);
-}
-
-.reported-offers .reject:hover, .reported-offers .reject:focus {
-    background-color: rgb(107, 107, 107);
-    color: white;
-}
-
-.reported-offers input[type='text'] {
-    width: 400px;
-    margin-bottom: 15px;
+.reported-offers h4 {
+    text-align: center;
+    font-size: 1.6rem;
+    color: #2d3748;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .reported-offers hr {
-    grid-column: 1 / -1;
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    opacity: 0.2;
+    margin: 10px 0 30px;
 }
+
+/* ===== LIST GRID ===== */
+
+.reported-offers .offers {
+    display: grid;
+    gap: 40px;
+}
+
+/* ===== MAIN CARD ===== */
+
+.reported-offers .estate {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 40px;
+
+    background: white;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.1);
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* top accent line */
+.reported-offers .estate::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* ===== CAROUSEL ===== */
+
+.reported-offers .estate .carousel img {
+    border-radius: 18px;
+    object-fit: cover;
+    height: 260px;
+}
+
+/* ===== INFO BLOCK ===== */
+
+.reported-offers .estate .info {
+    display: grid;
+    gap: 12px;
+}
+
+/* owner */
+.reported-offers .estate .info h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+/* header tags */
+.reported-offers .estate .info .header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: #718096;
+    font-weight: 600;
+}
+
+/* price */
+.reported-offers .estate .info h3 {
+    font-size: 1.8rem;
+    color: #667eea;
+    font-weight: 800;
+}
+
+/* parameters grid */
+.reported-offers .estate .info .parameters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+.reported-offers .estate .info span {
+    font-weight: 700;
+    color: #2d3748;
+}
+
+/* ===== INPUTS SECTION ===== */
+
+.reported-offers input[type='text'],
+.reported-offers input[type='number'] {
+    width: 100%;
+    max-width: 420px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    outline: none;
+    transition: 0.25s ease;
+    font-size: 14px;
+}
+
+.reported-offers input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+}
+
+/* labels */
+.reported-offers .desc p,
+.reported-offers .price p {
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* ===== BUTTONS ===== */
+
+.reported-offers .manage {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+/* confirm button */
+.reported-offers .confirm {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.reported-offers .confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.25);
+}
+
+/* reject button */
+.reported-offers .reject {
+    background: transparent;
+    border: 1px solid #2d3748;
+    color: #2d3748;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.reported-offers .reject:hover {
+    background: #2d3748;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ===== EMPTY STATE ===== */
+
+.reported-offers .offers > div p {
+    text-align: center;
+    color: #718096;
+}
+
+/* ===== ALERT MESSAGES ===== */
+
 .offer-msg {
-    margin-top: 30px;
-    padding: 15px;
-    border-radius: 8px;
-    font-weight: 500;
+    margin-top: 20px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
 }
 
 .offer-msg.success {
-    border: 2px solid #2ecc71;
+    border: 1px solid #2ecc71;
     color: #2ecc71;
-    background-color: #ecf9f1;
+    background: rgba(46, 204, 113, 0.08);
 }
 
 .offer-msg.error {
-    border: 2px solid #e74c3c;
+    border: 1px solid #e74c3c;
     color: #e74c3c;
-    background-color: #fdecea;
+    background: rgba(231, 76, 60, 0.08);
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 1024px) {
+    .reported-offers .estate {
+        grid-template-columns: 1fr;
+    }
+
+    .reported-offers .manage {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .reported-offers .estate {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .reported-offers .estate .carousel img {
+        height: 200px;
+    }
 }

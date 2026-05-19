@@ -20,7 +20,13 @@ function Navbar() {
 
                 <li><Link to="/register">Регистрация</Link></li>
                 <li><Link to="/login">Войти</Link></li>
-                <li><Link to="/account" id='account' className='disabled-link'>Аккаунт</Link></li>
+                <li><Link
+                    to="/account"
+                    id="account"
+                    className={!authenticatedUser ? 'disabled-link' : ''}
+                >
+                    Аккаунт
+                </Link></li>
             </ul>
         </div>
     )

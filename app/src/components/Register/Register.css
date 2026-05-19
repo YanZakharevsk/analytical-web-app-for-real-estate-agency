@@ -1,31 +1,175 @@
+/* ===== WRAPPER ===== */
+
 .registration {
-    margin-top: 30px;
+    width: 100%;
     display: grid;
     justify-content: center;
-    font-size: 17px;
+    gap: 25px;
+    font-size: 16px;
 }
 
-.registration h2 {
-    text-transform: uppercase;
-    font-size: 28px;
-    letter-spacing: 2px;
+/* ===== FORM CARD ===== */
+
+.registration form {
+    width: 100%;
+    max-width: 650px;
+    background: white;
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.12);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
 }
+
+/* top gradient line */
+.registration form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* ===== LABELS ===== */
+
+.registration label {
+    font-weight: 600;
+    color: #2d3748;
+    margin-top: 8px;
+    letter-spacing: 0.3px;
+}
+
+/* ===== INPUTS ===== */
+
+.registration input[type="text"],
+.registration input[type="password"],
+.registration input[type="email"],
+.registration input[type="tel"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    outline: none;
+    font-size: 15px;
+    transition: all 0.25s ease;
+    background: #fff;
+}
+
+.registration input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12);
+}
+
+/* ===== ROLE SECTION ===== */
 
 .registration .checkboxes {
-    font-size: 17px;
     display: grid;
-    grid-template-columns: auto auto;
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 5px;
 }
+
+.registration .checkboxes div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(102, 126, 234, 0.15);
+    transition: 0.25s ease;
+    cursor: pointer;
+}
+
+.registration .checkboxes div:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+
+/* ===== ALERTS ===== */
 
 .registration .alert {
     grid-column: 1 / -1;
-    justify-self: center;
+    padding: 12px 15px;
+    border-radius: 12px;
+    font-size: 14px;
 }
+
+.registration .alert-danger {
+    background: rgba(220, 53, 69, 0.08);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    color: #c53030;
+}
+
+.registration .alert-success {
+    background: rgba(40, 167, 69, 0.08);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    color: #2f855a;
+}
+
+/* ===== BUTTONS ===== */
 
 .registration .buttons {
     display: grid;
-    grid-template-columns: auto auto;
-    justify-content: center;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.registration .buttons button {
+    padding: 12px 15px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.registration .buttons button:first-child {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.registration .buttons button:first-child:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.25);
+}
+
+.registration .buttons button:last-child {
+    background: #f1f3f5;
+    color: #2d3748;
+}
+
+.registration .buttons button:last-child:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+/* disabled state */
+.registration button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+    .registration form {
+        padding: 25px;
+        border-radius: 18px;
+    }
+
+    .registration .checkboxes {
+        grid-template-columns: 1fr;
+    }
+
+    .registration .buttons {
+        grid-template-columns: 1fr;
+    }
 }

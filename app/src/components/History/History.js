@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import "./History.css";
 import { Carousel } from 'react-responsive-carousel';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; 
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 import PhotosFetcher from '../../PhotosFetcher';
 import bath from '../OfferCard/bath.png';
 import room from '../OfferCard/room.png';
@@ -22,113 +22,234 @@ function History() {
 
     useEffect(() => {
         const fetchArchivedOffers = async () => {
-            const response = await fetch(`/api/${new String(role).toLowerCase()}/archived-offers`, {
-                method: "GET",
-                headers: {
-                    "Authorization": "Bearer " + authenticatedUser.token
+            const response = await fetch(
+                `/api/${String(role).toLowerCase()}/archived-offers`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + authenticatedUser.token
+                    }
                 }
-            });
+            );
 
             if (!response.ok) {
                 console.log("Failed to fetch archived offers");
                 return;
-            };
+            }
 
             const data = await response.json();
 
-            console.log(data)
+            const estates = await Promise.all(
+                data.map(async (estate) => {
+                    const photos = await PhotosFetcher(
+                        estate.estateID
+                    );
 
-            const fetchPhotosForEstate = async (estate) => {
-                const photos = await PhotosFetcher(estate.estateID);
                     return {
                         id: estate.id,
                         info: estate,
                         photos: photos
                     };
-            }
-
-            const estates = await Promise.all(data.map(fetchPhotosForEstate));
+                })
+            );
 
             setArchived(estates);
         };
 
         fetchArchivedOffers();
-
-    }, [authenticatedUser]);
+    }, [authenticatedUser, role]);
 
     useEffect(() => {
-        const totalIncome = archived.reduce((total, offer) => total + offer.info.price, 0);
-        setTotalIncome(totalIncome);
-    
+        const total = archived.reduce(
+            (sum, offer) => sum + offer.info.price,
+            0
+        );
+        setTotalIncome(total);
     }, [archived]);
 
     function numberWithCommas(x) {
-        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return x.toString().replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            ","
+        );
     }
 
     return (
-        <div className="re-page">
+        <div className="re-page re-page--transparent">
+
             <section className="re-hero">
                 <h2>История</h2>
                 <p>Завершённые сделки.</p>
             </section>
+
             <div className="re-inner">
-        <div className="history">
-            <h4>История транзакций</h4>
-            <hr></hr>
-            {archived.length > 0 ? (
-                <div>
-                    {role === 'OWNER' && (
-                        <h6 className='income'><img src={income} width='35'/>Ваш общий доход  ${numberWithCommas(totalIncome)}</h6>
-                    )}
-                    
-                    {archived.map((estate) => (
-                        <div className='estate'>
-                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-                            <Carousel>
-                                {estate.photos.map((photo) => (
-                                    <div>
-                                        <img src={photo}></img>
+
+                <div className="re-surface">
+
+                    <div className="history">
+
+                        <h4>История транзакций</h4>
+
+                        <hr />
+
+                        {archived.length > 0 ? (
+                            <div>
+
+                                {role === 'OWNER' && (
+                                    <div className="income">
+                                        <img
+                                            src={income}
+                                            alt="income"
+                                        />
+                                        <span>
+                                            Общий доход: $
+                                            {numberWithCommas(
+                                                totalIncome
+                                            )}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {archived.map((estate) => (
+                                    <div
+                                        className="estate"
+                                        key={estate.id}
+                                    >
+
+                                        <div className="carousel-wrapper">
+                                            <Carousel>
+                                                {estate.photos.map(
+                                                    (photo, idx) => (
+                                                        <div key={idx}>
+                                                            <img
+                                                                src={photo}
+                                                                alt="estate"
+                                                            />
+                                                        </div>
+                                                    )
+                                                )}
+                                            </Carousel>
+                                        </div>
+
+                                        <div className="info">
+
+                                            <h4>
+                                                {estate.info.location}
+                                            </h4>
+
+                                            <div className="header">
+                                                <p>
+                                                    {estate.info.type
+                                                        .toLowerCase()
+                                                        .replace("_", " ")}
+                                                </p>
+                                                <p>
+                                                    {estate.info.availability
+                                                        .toLowerCase()
+                                                        .replace("_", " ")}
+                                                </p>
+                                                <p>
+                                                    {estate.info.condition
+                                                        .toLowerCase()
+                                                        .replace("_", " ")}
+                                                </p>
+                                            </div>
+
+                                            <h3>
+                                                $
+                                                {numberWithCommas(
+                                                    estate.info.price
+                                                )}
+                                            </h3>
+
+                                            <hr />
+
+                                            <div className="parameters">
+
+                                                <div className="col">
+                                                    <img src={size} />
+                                                    <p>
+                                                        <span>
+                                                            {estate.info.size}
+                                                        </span>
+                                                        m²
+                                                    </p>
+
+                                                    <img src={bath} />
+                                                    <p>
+                                                        <span>
+                                                            {estate.info.bathrooms}
+                                                        </span>
+                                                    </p>
+
+                                                    <img src={room} />
+                                                    <p>
+                                                        <span>
+                                                            {estate.info.rooms}
+                                                        </span>
+                                                    </p>
+                                                </div>
+
+                                                <div className="col">
+                                                    <img src={stairs} />
+                                                    <p>
+                                                        <span>
+                                                            {estate.info.storey}
+                                                        </span>
+                                                    </p>
+
+                                                    <img src={garage} />
+                                                    <p>
+                                                        {estate.info.garage
+                                                            ? "Garage included"
+                                                            : "No garage"}
+                                                    </p>
+
+                                                    <img src={balcony} />
+                                                    <p>
+                                                        {estate.info.balcony
+                                                            ? "Balcony included"
+                                                            : "No balcony"}
+                                                    </p>
+                                                </div>
+
+                                            </div>
+
+                                            {!estate.info.isReviewed && (
+                                                <button>
+                                                    <Link
+                                                        to={`/review/${
+                                                            estate.info.agentID
+                                                        }/${role.toLowerCase()}/${
+                                                            estate.id
+                                                        }`}
+                                                    >
+                                                        Отзывы
+                                                    </Link>
+                                                </button>
+                                            )}
+
+                                        </div>
+
                                     </div>
                                 ))}
-                            </Carousel>
-                        </div>
-                        <div className='info'>
-                            <h4>{estate.info.location}</h4>
-                            <div className='header'>
-                                <p>{estate.info.type.toLowerCase().replace("_", " ")} &bull;</p>
-                                <p>{estate.info.availability.toLowerCase().replace("_", " ")} &bull;</p>
-                                <p>{estate.info.condition.toLowerCase().replace("_", " ")}</p> 
-                            </div>
-                            <h3>${numberWithCommas(estate.info.price)}</h3>
-                            <hr></hr>
-                            <div className='parameters'>
-                                <div className='col'>
-                                    <img src={size}/><p><span>{estate.info.size}m²</span> площади</p>
-                                    <img src={bath}/><p><span>{estate.info.bathrooms}</span> {estate.info.bathrooms === 1 ? "ванная" : "ванных"}</p>
-                                    <img src={room}/><p><span>{estate.info.rooms}</span> комнаты</p>
-                                </div>
-                                <div className='col'>
-                                    <img src={stairs}/><p><span>{estate.info.storey}</span> этаж</p>
-                                    <img src={garage}/><p>Garage {estate.info.garage == false ? "не включено" : "включено"}</p>
-                                    <img src={balcony}/><p>Balcony {estate.info.balcony == false ? "не включено" : "включено"}</p>
-                                </div>
-                            </div>
-                            {!estate.info.isReviewed && (
-                                <button className='btn btn-dark'><Link to={`/review/${estate.info.agentID}/${role.toLowerCase()}/${estate.id}`}>Отзывы</Link></button>
-                            )}
-                        </div>
-                    </div>
-                    ))}
-                </div>
-            ) : (
-                <div>
-                    <p>Вы ещё не {role === 'CUSTOMER' ? 'получили' : 'продали'} ни одного объекта недвижимости</p>
-                </div>
-            )}
 
-        </div>
+                            </div>
+                        ) : (
+                            <div className="empty">
+                                <p>
+                                    Вы ещё не совершали сделок
+                                </p>
+                            </div>
+                        )}
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
     );
 }

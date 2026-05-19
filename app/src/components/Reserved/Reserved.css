@@ -1,60 +1,81 @@
 .reserved {
     display: grid;
-    margin: 40px 40px;
+    gap: 20px;
+    margin: 0;
 }
+
+/* список — как на других страницах (не flex column) */
 .reserved-offers {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 20px;
 }
 
+/* карточка — приведение к "surface style" */
 .reserved-preview {
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    display: grid;
+    gap: 15px;
+
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
     padding: 20px;
+
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+/* заголовок */
 .reserved-preview h3 {
-    margin-top: 0;
-    color: #333;
+    margin: 0;
     font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #333;
 }
 
+/* детали — делаем как в остальных страницах (grid, но аккуратно) */
 .reserved-details {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 15px 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
 }
 
+/* текст */
 .reserved-details p {
-    margin: 5px 0;
+    margin: 0;
     color: #666;
+    font-size: 14px;
 }
 
 .reserved-details strong {
     color: #333;
+    font-weight: 600;
 }
 
+/* статус */
 .blocked-info {
-    color: #28a745 !important;
-    font-weight: bold;
-    grid-column: span 2;
+    grid-column: 1 / -1;
+    color: #2e7d32 !important;
+    font-weight: 600;
+    margin-top: 5px;
 }
 
+/* кнопка — приведение к единому стилю */
 .view-details-btn {
-    padding: 10px 20px;
-    background-color: rgb(68, 68, 68);
+    justify-self: start;
+
+    padding: 10px 16px;
+    background-color: #333;
     color: white;
+
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+
     cursor: pointer;
     font-size: 14px;
-    margin-top: 10px;
+
+    transition: 0.2s;
 }
 
 .view-details-btn:hover {
-    background-color: #333333;
+    background-color: #555;
 }

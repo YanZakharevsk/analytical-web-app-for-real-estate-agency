@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import bullet from './checked.png';
 import { trackEvent } from '../../utils/analyticsTrack';
 
-
 function Manage() {
     const { authenticatedUser } = useAuth();
     const [reserved, setReserved] = useState([]);
@@ -26,9 +25,8 @@ function Manage() {
             }
 
             const data = await response.json();
-
             setReserved(data);
-        }
+        };
 
         fetchReserved();
     }, [authenticatedUser, isCancelled, isFinalized]);
@@ -42,13 +40,18 @@ function Manage() {
                 property_id: id
             }
         }, authenticatedUser?.token);
+
         const finalizeOffer = async () => {
-            const response = await fetch(`/api/agent/finalize-offer?id=${id}`, {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + authenticatedUser.token
+            const response = await fetch(
+                `/api/agent/finalize-offer?id=${id}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + authenticatedUser.token
+                    }
                 }
-            });
+            );
 
             if (!response.ok) {
                 console.log("Failed to finalize the offer");
@@ -57,15 +60,16 @@ function Manage() {
 
             alert("Successfully finalized the offer.");
             setIsFinalized(true);
+
             trackEvent({
                 eventName: "deal_completed",
                 category: "CONVERSION",
                 properties: {
                     deal_id: id,
-                    property_id: id,
-                    final_price: null
+                    property_id: id
                 }
             }, authenticatedUser?.token);
+
             trackEvent({
                 eventName: "deal_status_updated",
                 category: "SYSTEM",
@@ -76,10 +80,10 @@ function Manage() {
                     trigger_reason: "agent_finalize"
                 }
             }, authenticatedUser?.token);
-        }
+        };
 
         finalizeOffer();
-    }
+    };
 
     const onCancelClick = (id) => {
         trackEvent({
@@ -87,17 +91,21 @@ function Manage() {
             category: "INTERACTION",
             properties: {
                 deal_id: id,
-                property_id: id,
-                cancel_reason: "agent_cancelled"
+                property_id: id
             }
         }, authenticatedUser?.token);
+
         const cancelReservation = async () => {
-            const response = await fetch(`/api/unblock-offer?id=${id}`, {
-                method: "PATCH",
-                headers: {
-                    "Authorization": "Bearer " + authenticatedUser.token
+            const response = await fetch(
+                `/api/unblock-offer?id=${id}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Authorization":
+                            "Bearer " + authenticatedUser.token
+                    }
                 }
-            });
+            );
 
             if (!response.ok) {
                 console.log("Failed to cancel reservation");
@@ -105,15 +113,16 @@ function Manage() {
             }
 
             setIsCancelled(true);
+
             trackEvent({
                 eventName: "deal_cancelled",
                 category: "CONVERSION",
                 properties: {
                     deal_id: id,
-                    property_id: id,
-                    cancel_reason: "agent_cancelled"
+                    property_id: id
                 }
             }, authenticatedUser?.token);
+
             trackEvent({
                 eventName: "deal_status_updated",
                 category: "SYSTEM",
@@ -124,54 +133,156 @@ function Manage() {
                     trigger_reason: "agent_cancel"
                 }
             }, authenticatedUser?.token);
-        }
+        };
 
         cancelReservation();
-    } 
+    };
 
     return (
-        <div className="re-page">
+        <div className="re-page re-page--transparent">
+
             <section className="re-hero">
                 <h2>Управление бронью</h2>
                 <p>Зарезервированные предложения.</p>
             </section>
+
             <div className="re-inner">
-        <div className="manage-reserved">
-            <h4>Управление зарезервированными предложениями</h4>
-            <hr></hr>
-            {reserved.length > 0 ? (
-                <div className='offer'>
-                    {reserved.map((offer) => (
-                        <div className='card'>
-                            <h4>#{offer.id}</h4>
-                            <hr></hr>
-                            <div className='offer-info'>
-                                <p><img src={bullet} width={30}/><span>{offer.location}</span></p>
-                                <p><img src={bullet} width={30}/><span>{offer.rooms}</span> комнат</p>
-                                <p><img src={bullet} width={30}/><span>{offer.bathrooms}</span> ванных</p>
-                                <p><img src={bullet} width={30}/><span>{offer.storey}</span> этаж</p>
-                                <p className='capitalize'><img src={bullet} width={30}/><span>{offer.availability.toLowerCase().replace("_", " ")}</span></p>
-                                <p className='capitalize'><img src={bullet} width={30}/><span>{offer.condition.toLowerCase().replace("_", " ")}</span></p>
-                                <p className='capitalize'><img src={bullet} width={30}/><span>{offer.type.toLowerCase().replace("_", " ")}</span></p>
-                                <p><img src={bullet} width={30}/><span>{offer.size}m²</span> площадь</p>
-                                <p><img src={bullet} width={30}/>Garage{offer.garage ? " включен" : " не включен"}</p>
-                                <p><img src={bullet} width={30}/>Balcony{offer.garage ? " включен" : " не включен"}</p>
+
+                <div className="re-surface">
+
+                    <div className="manage-reserved">
+
+                        <h4>Управление бронями</h4>
+
+                        <hr />
+
+                        {reserved.length > 0 ? (
+                            <div className="offer">
+
+                                {reserved.map((offer) => (
+                                    <div className="card" key={offer.id}>
+
+                                        <h4>#{offer.id}</h4>
+
+                                        <hr />
+
+                                        <div className="offer-info">
+
+                                            <p>
+                                                <img src={bullet} />
+                                                <span>{offer.location}</span>
+                                            </p>
+
+                                            <p>
+                                                <img src={bullet} />
+                                                <span>{offer.rooms}</span>
+                                            </p>
+
+                                            <p>
+                                                <img src={bullet} />
+                                                <span>{offer.bathrooms}</span>
+                                            </p>
+
+                                            <p>
+                                                <img src={bullet} />
+                                                <span>{offer.storey}</span>
+                                            </p>
+
+                                            <p className="capitalize">
+                                                <img src={bullet} />
+                                                <span>
+                                                    {offer.availability}
+                                                </span>
+                                            </p>
+
+                                            <p className="capitalize">
+                                                <img src={bullet} />
+                                                <span>
+                                                    {offer.condition}
+                                                </span>
+                                            </p>
+
+                                            <p className="capitalize">
+                                                <img src={bullet} />
+                                                <span>
+                                                    {offer.type}
+                                                </span>
+                                            </p>
+
+                                            <p>
+                                                <img src={bullet} />
+                                                <span>{offer.size}m²</span>
+                                            </p>
+
+                                            <p>
+                                                <img src={bullet} />
+                                                <span>
+                                                    Garage:{' '}
+                                                    {offer.garage
+                                                        ? 'yes'
+                                                        : 'no'}
+                                                </span>
+                                            </p>
+
+                                            <p>
+                                                <img src={bullet} />
+                                                <span>
+                                                    Balcony:{' '}
+                                                    {offer.balcony
+                                                        ? 'yes'
+                                                        : 'no'}
+                                                </span>
+                                            </p>
+
+                                        </div>
+
+                                        <p>
+                                            Зарезервировано:{' '}
+                                            {offer.blockedBy}
+                                        </p>
+
+                                        <div className="buttons">
+
+                                            <button
+                                                className="finalize"
+                                                onClick={() =>
+                                                    onFinalizeClick(offer.id)
+                                                }
+                                            >
+                                                Завершить
+                                            </button>
+
+                                            <button
+                                                className="cancel"
+                                                onClick={() =>
+                                                    onCancelClick(offer.id)
+                                                }
+                                            >
+                                                Отменить
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+                                ))}
+
                             </div>
-                            <p>Зарезервировано: {offer.blockedBy}</p>
-                            <div className='buttons'>
-                                <button className='btn finalize' onClick={() => onFinalizeClick(offer.id)}>Завершить</button>
-                                <button className='btn cancel' onClick={() => onCancelClick(offer.id)}>Отменить бронирование</button>
+                        ) : (
+                            <div className="empty">
+                                <p>
+                                    Пока ни одного бронирования
+                                </p>
                             </div>
-                        </div>
-                    ))}
+                        )}
+
+                    </div>
+
                 </div>
-            ) : (
-                <p>Пока ни одного бронирования не сделано.</p>
-            )}
-        </div>
+
             </div>
+
         </div>
-    )
+    );
 }
 
 export default Manage;

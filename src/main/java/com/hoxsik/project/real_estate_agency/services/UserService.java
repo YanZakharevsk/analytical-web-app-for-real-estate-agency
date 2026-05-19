@@ -22,6 +22,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TelegramService telegramService;
 
     /**
      * Allows to create a User account
@@ -38,14 +39,30 @@ public class UserService {
 
         userRepository.save(user.get());
 
+        telegramService.sendMessage(buildTelegramMessage(user.get()));
+
         return new Response(true, HttpStatus.OK, "Корректное создание аккаунта");
     }
 
-    /**
-     * Retrieves a user by their username
-     * @param username Username of the user
-     * @return User object if present, empty otherwise
-     */
+    private String buildTelegramMessage(User user) {
+        return """
+            🆕 Новый пользователь зарегистрирован
+
+            👤 Имя: %s %s
+            🔑 Username: %s
+            📧 Email: %s
+            📱 Телефон: %s
+            🏷 Роль: %s
+            """.formatted(
+                user.getFirstName(),
+                user.getLastName(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getRole()
+        );
+    }
+
     public Optional<User> getByUsername(String username) {
         return userRepository.findByUsername(username);
     }

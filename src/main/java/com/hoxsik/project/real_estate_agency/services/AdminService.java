@@ -162,6 +162,7 @@ public class AdminService {
         removeProfileForRole(user.getId(), oldRole, false);
         user.setRole(newRole);
         userRepository.saveAndFlush(user);
+
         createProfileForRole(user, newRole);
     }
 
